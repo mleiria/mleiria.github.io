@@ -12,46 +12,120 @@
     </author>
     
       <item>
-        <title>HHHello World!</title>
+        <title>Álgebra Linear. O essencial.</title>
         <description>&lt;script src=&quot;https://polyfill.io/v3/polyfill.min.js?features=es6&quot;&gt;&lt;/script&gt;
 &lt;script id=&quot;MathJax-script&quot; async
           src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot;&gt;
 &lt;/script&gt;
 
-&lt;h2&gt;Jekyllti&lt;/h2&gt;
-&lt;p&gt;Y Love You World s3&lt;/p&gt;
-asdadsasd
-Text can be bold, italic, strikethrough or keyword. Link to another page. There should be whitespace between paragraphs. There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project. Header 1 This is a normal paragraph following a header. GitHub is a...Text can be bold, italic, strikethrough or keyword. Link to another page. There should be whitespace between paragraphs. There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project. Header 1 This is a normal paragraph following a header. GitHub is a...Text can be bold, italic, strikethrough or keyword. Link to another page. There should be whitespace between paragraphs. There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project. Header 1 This is a normal paragraph following a header. GitHub is a...Text can be bold, italic, strikethrough or keyword. Link to another page. There should be whitespace between paragraphs. There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project. Header 1 This is a normal paragraph following a header. GitHub is a...Text can be bold, italic, strikethrough or keyword. Link to another page. There should be whitespace between paragraphs. There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project. Header 1 This is a normal paragraph following a header. GitHub is a...Text can be bold, italic, strikethrough or keyword. Link to another page. There should be whitespace between paragraphs. There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project. Header 1 This is a normal paragraph following a header. GitHub is a...Text can be bold, italic, strikethrough or keyword. Link to another page. There should be whitespace between paragraphs. There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project. Header 1 This is a normal paragraph following a header. GitHub is a...Text can be bold, italic, strikethrough or keyword. Link to another page. There should be whitespace between paragraphs. There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project. Header 1 This is a normal paragraph following a header. GitHub is a...
-asdasdasd
-asdadasd
-adadads
-asdadad
-adsadads
-asdadad
-asdadadassssssssssssssssssssssssssssssssssssss
-dddddddddddddddddddddddddddddddddddddddddddddd
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-&lt;p&gt;
-  When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
-  \[x = {-b \pm \sqrt{b^2-4ac} \over 2a}.\]
+&lt;h2&gt;Multiplicação de Matrizes e Vectores&lt;/h2&gt;
+&lt;p&gt;Uma das mais importantes operações que envolvem matrizes é a multiplicação de duas matrizes.&lt;/p&gt;
+O &lt;b&gt;produto matricial&lt;/b&gt; entre duas matrizes \(A\) e \(B\) é uma terceira matriz \(C\).&lt;br&gt;
+Para este produto ser definido, a matriz \(A\) tem de ter o mesmo número de colunas que o número de linhas
+da matriz \(B\).&lt;br&gt;
+Se \(A\) tiver dimensões (\(m\) x \(n\)), onde \(m\) representa o número de linhas e \(m\) é o número de colunas e \(B\) tiver dimensões 
+\((n\) x \(p\)), então \(C\) terá dimensões (\(m\) x \(p\)).&lt;br&gt;
+Por exemplo:&lt;p&gt;
+	
+	\[C = AB\]
 &lt;/p&gt;
-</description>
+Esta operação é definida da seguinte forma:&lt;p&gt;
+
+	\[C_{i,j} = \sum_{k} A_{i,k} B_{k,j}\]
+&lt;/p&gt;
+Atenção que este produto não corresponde ao produto dos elementos individuais. Este produto também existe e chama-se &lt;b&gt;produto Hadamard&lt;/b&gt; ou 
+&lt;b&gt;produto elemento a elemento &lt;/b&gt;(&lt;i&gt;element-wise&lt;/i&gt;) e denota-se 
+por \(A \odot B\)
+&lt;p&gt;
+O &lt;b&gt;produto vectorial&lt;/b&gt; (&lt;i&gt;dot product&lt;/i&gt;) entre dois vectores \(x\) e \(y\) com a mesma dimensão, é o produto matricial \(x^T y\)&lt;br&gt;
+O produto matricial apresenta algumas propriedades úteis. Por exemplo a distributividade:&lt;p&gt;
+	\[A(B + C) = AB + AC\]
+&lt;/p&gt;Também é associativo:&lt;p&gt;
+	\[A(BC) = (AB)C\]
+&lt;/p&gt;
+A multiplicação matricial &lt;i&gt;não é comutativa&lt;/i&gt; (a condição \(AB = BA\) nem sempre é válida). No entanto o produto vectorial entre dois
+vectores é comutativa:&lt;p&gt;
+	\[x^Ty = y^Tx\]
+&lt;/p&gt;
+A matriz transposta do produto de duas matrizes é:&lt;p&gt;
+	\[(AB)^T = B^TA^T\]
+&lt;/p&gt;
+&lt;h2&gt;Identidade e Matriz Inversa&lt;/h2&gt;
+Para descrever a matriz inversa, precisamos primeiro definir o conceito de &lt;b&gt;matriz identidade&lt;/b&gt;. Uma matriz identidade é uma matriz que
+não altera qualquer vector que for multiplicado por ela. Formalmente, \(I_{n} \in R^{nxn}\) e &lt;p&gt;
+	\[\forall x \in R^{n}, I_nx = x\]
+&lt;/p&gt;
+A estrutura da matriz identidade é simples: todas as entradas da diagonal principal são 1 e todas as outras são 0. Por exemplo:&lt;p&gt;
+	\[I_3 = \begin{bmatrix}1 &amp; 0 &amp; 0\\0 &amp; 1 &amp; 0 \\0 &amp; 0&amp; 1\end{bmatrix}\]
+&lt;/p&gt;
+A &lt;b&gt;matriz inversa&lt;/b&gt; de \(A\), denota-se por \(A^{-1}\) e é difinida como a matriz tal que:&lt;p&gt;
+	\[A^{-1} A =I_n\]
+&lt;/p&gt;
+Consideremos como exercício final o seguinte sistema de equações lineares:&lt;p&gt;
+	\[A x = b\]
+&lt;/p&gt;
+onde \(A \in R^{mxn}\) é uma matriz com os valores conhecidos, \(b \in R^m\) é um vector conhecido e \(x \in R^{n}\) é o vector de variáveis 
+desconhecidas para o qual pretendemos resolver o sistema. Esta equação resolve-se seguindo os seguintes passos:&lt;p&gt;
+	\[A x = b\]
+	\[A^{-1}A x = A^{-1}b\]
+	\[I_n x = A^{-1}b\]
+	\[x = A^{-1}b\]
+&lt;/p&gt;
+&lt;h2&gt;Norma&lt;/h2&gt;
+Em &lt;i&gt;machine learning&lt;/i&gt; normalmente mede-se o comprimento de um vector usando uma função chamada &lt;b&gt;norma&lt;/b&gt;. Formalmente,
+a norma \(L^p\) é dada por:&lt;p&gt;
+	\[||x||_p = (\sum_i |x_i|^p)^{1/p}\]
+para \(p \in R, p \geq 1\)
+&lt;/p&gt;
+As normas são funções que mapeiam vectores para valores não negativos. Intiuitivamente podemos pensar que a norma de um vector \(x\) 
+mede a distância da origem ao ponto \(x\). Sendo um pouco mais rigorosos, a norma é qualquer função \(f\) que satisfaz as seguintes propriedades:&lt;p&gt;
+	&lt;ul&gt;
+		&lt;li&gt;\(f(x) = 0\ \Rightarrow x = 0\)&lt;/li&gt;
+		&lt;li&gt;\(f(x + y) \leq f(x) + f(y)\)&lt;/li&gt;
+		&lt;li&gt;\(\forall \alpha \in R, f(\alpha x) = |\alpha|f(x)\)&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/p&gt;
+A norma \(L^2\) (quando \(p = 2\)) é conhecida como a &lt;b&gt;norma Euclideana&lt;/b&gt;, que é simplesmente a distância euclideana da origem ao ponto 
+identificado por \(x\). Costuma-se designar por \(||x||\), onde o \(2\) é omitido na notação.&lt;br&gt;
+Também é bastante comum medir o comprimento de um vector usando o quadrado da norma \(L^2\), que pode ser calculado simplesmente como
+\(x^Tx\)&lt;br&gt;
+A norma \(L^1\) também é bastante utilizada:&lt;p&gt;
+	\[||x||_1 = \sum_i |x_i|\]
+&lt;/p&gt;
+Outra norma bastante utilizada nesta área é a norma \(L^\infty\), também conhecida como &lt;b&gt;norma máxima&lt;/b&gt; (&lt;i&gt;max norm&lt;/i&gt;):&lt;p&gt;
+	\[||x||_\infty = \mathrm{max}_i|x_i|\]
+&lt;/p&gt;
+Por fim, muitas vezes é necessário calcular o comprimento de uma matriz. No contexto de &lt;i&gt;deep learning&lt;/i&gt; a norma mais utilizada 
+é a &lt;b&gt;norma Frobenius&lt;/b&gt;:&lt;p&gt;
+	\[||A||_F = \sqrt{\sum_{i,j} A^2_{i,j}}\]
+&lt;/p&gt;
+que é semelhante à norma \(L^2\) de um vector.&lt;br&gt;
+	O produto vectorial de dois vectores pode ser escrito em termos das suas normas:&lt;p&gt;
+		\[x^Ty = ||x||_2 ||y||_2 cos \theta\]
+&lt;/p&gt;
+onde \(\theta\) é o ângulo entre \(x\) e \(y\)
+&lt;h2&gt;Matrizes e vectores especiais&lt;/h2&gt;
+&lt;h3&gt;Matriz diagonal&lt;/h3&gt;
+Esta matriz só apresenta valores diferentes de zero na sua diagonal principal. Formalmente, uma matriz \(D\) é diagonal se e só se \(D_{i,j} = 0\) para todos
+os \(i \neq j\). Já vimos um exemplo de uma matriz diagonal: a matriz identidade, onde todas as entradas na diagonal principal são 1.
+&lt;h3&gt;Matriz simétrica&lt;/h3&gt;
+É qualquer matriz tal que é igual à sua transposta:&lt;p&gt;
+	\[A = A^T\]
+&lt;/p&gt;
+&lt;h3&gt;Vector unitário&lt;/h3&gt;
+É um vector com a &lt;b&gt;norma unitária&lt;/b&gt;:&lt;p&gt;
+	\[||x||_2 = 1\]
+&lt;/p&gt;
+Um vector \(x\) e um vector \(y\) são ortogonais entre si, se \(x^Ty = 0\). Se ambos os vectores tiverem uma norma diferente de zero, isto quer dizer que formam um 
+ângulo de \(90^0\) entre si. Se dois vectores forem ortogonais e tiverem norma unitária, chamam-se &lt;b&gt;ortonormais&lt;/b&gt;.
+&lt;h3&gt;Matriz ortogonal&lt;/h3&gt;
+É uma matriz quadrada cujas linhas são mutualmente ortonormais e cujas colunas são mutualmente ortonormais:&lt;p&gt;
+	\[A^TA = AA^T = I\]
+&lt;/p&gt;
+Isto implica que:&lt;p&gt;
+	\[A^{-1} = A^T\]
+&lt;/p&gt;
+Estas matrizes são interessantes porque a sua inversa é computacionalmente fácil de obter.</description>
         <pubDate>Thu, 04 Jun 2020 17:50:00 +0100</pubDate>
         <link>http://localhost:4000//hello-world</link>
         <link href="http://localhost:4000/hello-world"/>

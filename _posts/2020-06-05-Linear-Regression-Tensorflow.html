@@ -1,0 +1,190 @@
+---
+layout: post
+title:  Regressão Linear com TensorFlow. O essencial.
+date:   2020-06-04 16:50:00
+---
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<h2>Introdução</h2>
+Podemos definir um algoritmo de machine learning como um algoritmo que é capaz melhorar
+a capacidade computacional de um programa a executar determinada tarefa através da experiência.<br>
+Sendo esta definição um pouco abstracta, vamos apresentar um exemplo concreto: <b>regressão linear</b>.<br>
+Como o nome indica, o objectivo é construir um sistema que receba um vector \(\mathbf x \in R^n\) como input e prever
+o valor de um escalar \(y \in R\) como output. O output da regressão linear é uma função linear do input.<br>
+Seja \(\hat y\) o valor que o nosso modelo prevê que o valor real \(y\) deve tomar. Podemos definir o output
+como:<p>
+	\[\hat y = \mathbf w^T \mathbf x\]
+</p>
+onde \(\mathbf w \in R^n\) é o vector de <b>parâmetros</b>.<br>
+Os parâmetros são os valores que controlam o comportamento do sistema. Neste caso, \(w_i\) é o coeficiente
+que multiplicamos pelo valor de entrada (<i>feature</i>) \(x_i\) antes de somarmos todas as contribuições
+de todos os valores de entrada. Podemos pensar em \(\mathbf w\) como um conjunto de <b>pesos</b> que determinam como
+cada valor de entrada afecta a previsão.<br>
+Se um valor de entrada \(x_i\) recebe um peso positivo \(w_i\), então, aumentando esse valor vai provocar um aumento 
+no valor previsto \(\hat y\).<br>
+Se um valor de entrada \(x_i\) recebe um peso negativo \(w_i\), então, aumentando esse valor vai provocar um decréscimo 
+no valor previsto \(\hat y\).<p>
+Desta forma temos a definição da nossa tarefa <i>T</i>: prever \(y\) a partir de \(\mathbf x\) usando \(\hat y = \mathbf w^T\mathbf x\).<br>
+O próximo passo é deifinir uma medida de <i>performance</i> <i>P</i>.
+</p>
+Uma das formas de medir esta <i>performance</i> é calculando o <b>erro quadtrático médio</b> do modelo no conjunto de dados de teste. Se
+\( \mathbf{ \hat y}^{(test)} \) dá-nos a previsão do modelo no conjunto de dados de teste, então o erro quadtrático médio é dado por:<p>
+
+	\[ MSE_{test} = \frac{1}{m} \sum_i (\mathbf{ \hat y}^{(test)} - \mathbf{y}^{(test)})^2_i\]
+<br>
+ou, alternativamente
+<br>
+	\[ MSE_{test} = \frac{1}{m} \| \mathbf{ \hat y}^{(test)} - \mathbf{y}^{(test)}\|^2_2\]
+</p>
+Intuitivamente podemos ver que esta medida de erro decresce para 0 quando \( \mathbf{ \hat y}^{(test)} = \mathbf{ y}^{(test)} \)
+<h2>Procedimento</h2>
+Para fazermos um algoritmo de machine learning, temos de desenhar um algoritmo que melhore os pesos \( \mathbf w\) de uma maneira que reduza 
+o \( MSE_{test} \) quando é permitido ao algoritmo ganhar experiência através da observação do conjunto de dados de treino \( (\mathbf X^{(train)}, \mathbf Y^{(train)}) \).<br>
+A forma mais natural de minimizar este erro é obter o gradiente e igualá-o a zero:<p>
+
+	\[ \nabla_w MSE_{train} = 0 \]
+	\[ \Rightarrow \nabla_w \frac{1}{m} \| \mathbf{ \hat y}^{(train)} - \mathbf{y}^{(train)}\|^2_2 = 0\]
+	\[ \Rightarrow \frac{1}{m} \nabla_w  \| \mathbf X^{(train)} \mathbf w - \mathbf{y}^{(train)}\|^2_2 = 0\]
+	\[ \Rightarrow \mathbf w = (\mathbf X^{(train)T} \mathbf X^{(train)})^{-1} \mathbf X^{(train)T} \mathbf y^{(train)} \]
+</p> 
+Vale a pena referir que o termo <b>regressão linear</b> é usado exprimir um modelo ligeiramente mais sofisticado, com um parâmetro adicional - 
+um termo de intersecção \(b\):<p>
+	\[\hat y = \mathbf w^T \mathbf x + b\]
+</p>
+<h2>TensorFlow</h2>
+Tentando manter as coisas simples, vamos usar TensorFlow para converter graus Celsius para Fahrenheit. A fórmula aproximada é:<p>
+	\[ f = 1.8c + 32\]
+</p>
+
+o exercício será passarmos ao TensorFlow uma amostra de dados Celcius e os seus correspondentes Fahrenheit. Depois, treinamos um modelo que
+replique a fórmua supra de conversão, através de um processo de treino.<br>
+<br>
+<h4>1 - Importar dependências</h4>
+
+<pre>
+import tensorflow as tf
+import numpy as np
+</pre>
+
+<br>
+<h4>2 - Preparar o conjunto de dados de treino</h4>
+Este é um algoritmo de machine learning supervisionado porque vamos mostrar ao modelo alguns exemplos de conversão e queremos que ele nos
+dê uma fórmula generalizada:<br>
+
+<pre>
+celsius_q    = np.array([-40, -10,  0,  8, 15, 22,  38],  dtype=float)
+fahrenheit_a = np.array([-40,  14, 32, 46, 59, 72, 100],  dtype=float)
+</pre>
+
+NOTA: Alguma terminologia para o que se segue:<p>
+<ul>
+	<li>
+<b>Feature</b> - os valores de input para o nosso modelo. Neste caso é um só valor: os graus em Celcius.
+</li>
+<li>
+<b>Labels</b> - o output que o nosso modelo vai prever. Neste caso é um só valor: os graus em Fahrenheit.
+</li>
+<li>
+<b>Exemplo</b> - um par de valores input/output usados na fase de treino. Neste caso é um par de valores (Celcius, Fahrenheit)
+</li>
+</ul>
+</p>
+
+<h4>3 - Criar o modelo</h4>
+O passo seguinte é criar o modelo. Como este é um problema muito simples basta-nos criar uma rede com uma única camada
+e um único nó.
+<br>
+
+<h4>3.1 - Construir a camada (<i>layer</i>)</h4>
+
+<pre>l0 = tf.keras.layers.Dense(units=1, input_shape=[1])</pre>
+onde
+<ul>
+<li><i>l0</i>: Nome da camada</li>
+<li><i>input_shape=[1]</i>: Especifica que o input desta camada é um único valor, ou seja, a forma é um array de uma dimensão com um membro.
+O valor é do tipo float e representa os graus Celcius</li>
+<li><i>units=1</i>:Especifica o número de neurónios (ou nós, ou unidades) na camada. O número de neurónios define quantas variáveis internas 
+a camada tem para tentar resolver o problema</li>
+</ul>
+<br>
+<h4>3.2 - Adicionar a camada ao modelo</h4>
+Uma vez definidas as camadas, podemos adicioná-las ao modelo. O modelo sequencial recebe uma lista de camadas como argumento que especifica 
+a ordem de cálculo desde o input até ao output. No nosso caso só temos uma camada:
+<pre>
+model = tf.keras.Sequential([l0])
+</pre>
+<br>
+<h4>4 - Compilar o modelo com as funções de perda e otimizador</h4>
+Antes de treinar o modelo, é necessário compilar, definindo duas funções importantes:
+<ul>
+<li><b>Função de perda (<i>loss function</i>)</b>: uma forma de medir o quão afastado está o valor previsto pela rede do valor real. Neste caso
+faz sentido usar o erro quadrático médio.</li>
+<li><b>Função otimizadora</b>: uma forma de ajustar os valores internos de forma a reduzir a perda.</li>
+</ul>
+<pre>model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(0.1))</pre>
+Estas funções serão utilizadas durante a fase de treino (<i>model.fit()</i>), primeiro para calcular a perda em cada ponto e posteriormente
+melhorá-la.
+<br>
+Note-se que o otimizador Adam, recebe um argumento, o <i>learning rate</i>. Este é um hyperparâmetro e representa o comprimento do passo a ser dado, em cada
+iteração, quando o modelo ajusta os seus valores. Normalmente escolhemos um valor entre 0.001 e 0.1.
+
+<br><br>
+<h4>5 - Treinar o modelo</h4>
+O treino do modelo é feito invocando o método <i>fit()</i>.<br>
+Durante o treino o modelo vai receber os valores em graus Celcius, fazer algumas contas usando os pesos e retorna como output o que ele considera
+ser a conversão para Fahrenheit. Como os pesos vão ser inicializados com valore aleatórios, o primeiro output não vai ter nada a ver com o valor
+correcto da conversão. Depois é utilizada a função de perda para calcular o quão afastado o outuput está do valor real. Por fim a função de otimização
+reajusta os pesos de forma a aproximar o output do valor real.
+<p>
+Este ciclo de calcular, comparar e ajustar é controlado pelo ḿétodo <i>fit()</i>: o primeiro argumento são os inputs (graus Celcius), o segundo argumento
+são os outputs desejados (graus Fahrenheit). O argumento <i>epochs</i> especifica quantas vezes este ciclo deve ser executado
+</p>
+<pre>history = model.fit(celsius_q, fahrenheit_a, epochs=500, verbose=False)</pre>
+<br>
+<h4>6 - Mostrar as estatísticas do treino</h4>
+O método <i>fit()</i> retorna um objecto de histórico. Podemos usar este objecto para analisar como é que a perda evolui ao longo das épocas. 
+<br>
+Uma perda elevada diz-nos que a conversão para Fahrenheit prevista pelo nosso modelo está longe do valor verdadeiro. Vejamos o aspeto da 
+curva de perda:
+<pre>
+import matplotlib.pyplot as plt
+plt.xlabel('Epoch')
+plt.ylabel("Root Mean Squared Error")
+plt.plot(history.history['loss'])
+</pre>
+<img src="../images/2020-06-04-LossCurve.png" alt="Loss curve">
+<br><br>
+<h4>6 - Usar o modelo para fazer previsões</h4>
+Com o modelo treinado, estamos em condições de fazer previsões, i.e., apresentar um determinado valor (graus Celcius) à rede neuronal e obter
+o respetivo valor em Fahrenheit.<br>
+Por exemplo, 100º Celcius corresponde a quantos graus Fahrenheit? Note-se que este valor não foi apresentado à rede na fase de treino.
+<pre>print(model.predict([100.0]))</pre>
+[[211.75616]]
+<br><br>
+A resposta correta (utilizando a fórmula de conversão), é:<p>
+	100×1.8+32=212
+</p>
+Não está nada mal!
+<br><br>
+Resumindo:
+<ul>
+<li>Criar o modelo</li>
+<li>Treinar o modelo com 35000 exemplos (7 pares em 500 épocas)</li>
+</ul>
+O nosso modelo foi afinando os pesos na camada densa até conseguir retornar o valor correto em Fahrenheit para qualquer valor Celcius.
+<br><br>
+Por último podemos ver os valores finais dos pesos determinados pela rede:
+<pre>print("These are the layer variables: {}".format(l0.get_weights()))</pre>
+
+[array([[1.7974412]], dtype=float32), array([31.949804], dtype=float32)]
+<br><br>
+A primeira variável está próxima de \(~1.8\) e a segunda, próxima de \(~32\). Estes valores (\(1.8\) e \(32\)) são os valores da fórmula 
+de conversão.
+
+
+

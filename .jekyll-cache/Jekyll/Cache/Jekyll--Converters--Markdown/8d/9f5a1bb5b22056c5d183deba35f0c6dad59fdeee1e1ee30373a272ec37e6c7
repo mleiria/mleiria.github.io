@@ -1,0 +1,22 @@
+I"y<ul>
+    
+      <li>
+          <h2><a href="/Regressao-Linear-Dados-Sinteticos">Regressão Linear com dados sintéticos</a></h2>
+          <time datetime="2020-06-09T17:00:00+01:00">09 Jun 2020</time>
+          <p>Introdução Vamos analisar a capacidade de um MLP (Multi Layer Perceptron) em aproximar quatro funções diferentes. Em cada caso vamos extrair N = 50 pontos escolhidos uniformemente em x no intervalo (-1, 1) e os correspondentes valores f(x) calculados. Estes pontos serão depois usados para treinar uma rede neuronal com:...</p>
+      </li>
+    
+      <li>
+          <h2><a href="/Linear-Regression-Tensorflow">Regressão Linear com TensorFlow. O essencial.</a></h2>
+          <time datetime="2020-06-04T17:50:00+01:00">04 Jun 2020</time>
+          <p>Introdução Podemos definir um algoritmo de machine learning como um algoritmo que é capaz melhorar a capacidade computacional de um programa a executar determinada tarefa através da experiência. Sendo esta definição um pouco abstracta, vamos apresentar um exemplo concreto: regressão linear. Como o nome indica, o objectivo é construir um...</p>
+      </li>
+    
+      <li>
+          <h2><a href="/Algebra-Linear">Álgebra Linear. O essencial.</a></h2>
+          <time datetime="2020-06-04T17:50:00+01:00">04 Jun 2020</time>
+          <p>Multiplicação de Matrizes e Vectores Uma das mais importantes operações que envolvem matrizes é a multiplicação de duas matrizes. O produto matricial entre duas matrizes \(A\) e \(B\) é uma terceira matriz \(C\). Para este produto ser definido, a matriz \(A\) tem de ter o mesmo número de colunas que...</p>
+      </li>
+    
+</ul>
+:ET

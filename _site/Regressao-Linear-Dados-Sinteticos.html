@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <meta name="generator" content="Jekyll">
+
+  <title>Regressão Linear com dados sintéticos</title>
+
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="ATOM Feed" /> <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Regressão Linear com dados sintéticos | Deep Learning-Blog</title>
+<meta name="generator" content="Jekyll v4.1.0" />
+<meta property="og:title" content="Regressão Linear com dados sintéticos" />
+<meta name="author" content="MLeiria" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A Deep Learning Blog" />
+<meta property="og:description" content="A Deep Learning Blog" />
+<link rel="canonical" href="http://localhost:4000/Regressao-Linear-Dados-Sinteticos" />
+<meta property="og:url" content="http://localhost:4000/Regressao-Linear-Dados-Sinteticos" />
+<meta property="og:site_name" content="Deep Learning-Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-09T17:00:00+01:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-06-09T17:00:00+01:00","dateModified":"2020-06-09T17:00:00+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/Regressao-Linear-Dados-Sinteticos"},"url":"http://localhost:4000/Regressao-Linear-Dados-Sinteticos","author":{"@type":"Person","name":"MLeiria"},"description":"A Deep Learning Blog","headline":"Regressão Linear com dados sintéticos","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <header>
+  <div>
+    <a href="/">
+    
+    <h1>deeplearning@home:~$</h1>
+    </a>
+    <div class="header-links">
+      <a href="/archive"><h2 class="header-link">Archive</h2></a>
+<a href="/about"><h2 class="header-link">About</h2></a>
+<a href="/atom.xml"><h2 class="header-link">RSS</h2></a>
+    </div>
+  </div>
+</header>
+    <div class="container">
+      <section id="main_content">
+        <article>
+  <h2>Regressão Linear com dados sintéticos</h2>
+  <time datetime="2020-06-09T17:00:00+01:00" class="by-line">09 Jun 2020</time>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+<h2>Introdução</h2>
+Vamos analisar a capacidade de um MLP (Multi Layer Perceptron) em aproximar quatro funções diferentes.
+<br>
+Em cada caso vamos extrair <i>N = 50</i> pontos escolhidos uniformemente em <i>x</i> no intervalo (-1, 1) e os
+correspondentes valores <i>f(x)</i> calculados.
+<br>
+Estes pontos serão depois usados para treinar uma rede neuronal com:
+<ul>
+	<li>Duas camadas com:</li>
+	<li>Três unidades escondidas com:</li>
+	<li>Funcões de activação <i>tanh</i> e:</li>
+	<li>Unidades de saída lineares</li>
+</ul>
+<p>
+Nota: link para o jupyter notebook com o código completo: 
+<a href="https://github.com/mleiria/mleiria.github.io/blob/master/jupyter-notebook/Linear_Regression_Synthetic_Data.ipynb" target="_blank">Linear_Regression_Synthetic_Data.ipynb</a>
+</p>
+
+<i>Hyperparameters</i> que podem ser alterados:
+<ul>
+	<li>Learning rate</li>
+	<li>Número de épocas</li>
+	<li>Tamanho do batch</li>
+</ul>
+<h3>Módulos a importar</h3>
+<pre>
+import pandas as pd
+import tensorflow as tf
+from matplotlib import pyplot as plt
+</pre>
+<h3>Definir funções que constroem e treinam o modelo</h3>
+Vamos definir duas funções:
+<ul>
+	<li><pre>build_model(my_learning_rate)</pre> que constroi um modelo vazio</li> 
+	<li><pre>train_model(model, feature, label, epochs)</pre> que treina o modelo a partir dos exemplos (feature e label) que lhe passamos</li>
+</ul>
+<pre>
+#@title Função para criar o modelo
+def build_model(my_learning_rate):
+    """
+    Cria e compila um modelo de regressão linear.
+    
+    Arguments:
+    my_learning_rate -- a taxa de aprendizagem
+    
+    Returns:
+    model -- o modelo compilado
+    """
+    # O modelo mais simples de tf.keras é o sequencial
+    # O modelo sequencial pode conter uma ou mais camadas
+    model = tf.keras.models.Sequential()
+    
+    # Topografia do modelo
+    # Duas camadas escondidas, cada uma com 3 unidades
+    # A camada de output só tem uma unidade (visto que só queremos
+    # prever um único valor) e não usa nenhuma função de activação
+    model.add(tf.keras.layers.Dense(units=3, activation="tanh", input_shape=(1,)))
+    model.add(tf.keras.layers.Dense(units=3, activation="tanh"))
+    model.add(tf.keras.layers.Dense(1))
+    
+    
+    # Compilar a topografia do modelo
+    # Configurar o treino para minimizar o erro quadrático médio
+    model.compile(optimizer=tf.keras.optimizers.RMSprop(lr=my_learning_rate),
+                  loss="mean_squared_error",
+                  metrics=[tf.keras.metrics.RootMeanSquaredError()])
+    
+    return model           
+
+#@title Função para treinar o modelo
+def train_model(model, feature, label, epochs, batch_size):
+    """
+    Treina o modelo de acordo com os dados de entrada
+    
+    Arguments:
+    model -- o modelo a ser treinado
+    feature -- um array de features (os valores x)
+    label -- um array de labels (os valores y = f(x))
+    epochs -- numero de epocas de treino
+    batch_size -- tamanho do batch
+    
+    Returns:
+    epochs -- Lista de épocas
+    rmse -- Raíz quadrada do erro quadrático médio
+    """
+    
+    # Preparar uma diretoria de logs para ser usada pelo tensorboard
+    log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+
+    # Passa os valores das features e os valores das labels
+    # para o modelo. O modelo vai treinar durante o número
+    # de epochs especificado e gradualmente vai aprendendo
+    # como é que os valores das features se relacionam com
+    # os valores das labels
+    history = model.fit(x=feature,
+                        y=label,
+                        batch_size=batch_size,
+                        epochs=epochs,
+                        callbacks=[tensorboard_callback])
+    
+    # Gather the trained model's weight and bias.
+    trained_weight = model.get_weights()
+    trained_bias = model.get_weights()
+    
+    # A lista das epocas e guardada em separado
+    epochs = history.epoch
+    
+    # Faz um snapshot do historico de cada epoca
+    hist = pd.DataFrame(history.history)
+
+    # Recolhe especificamente a raiz quadrada do erro quadrático médio
+    # em cada epoca
+    rmse = hist["root_mean_squared_error"]
+
+    return epochs, rmse
+
+</pre>
+<h3>Definir funções auxiliares para visualizar os resultados</h3>
+Vamos definir duas funções de forma a conseguirmos visualizar o modelo
+e a curva de perda:
+<ul>
+	<li><pre>plot_the_model(feature, label, preds)</pre> que mostra os pontos originais e uma linha com os pontos previstos pela rede</li> 
+	<li><pre>plot_the_loss_curve</pre> que mostra a curva de perda em função das épocas</li>
+</ul>
+<pre>
+#@title Gráfico para mostrar o modelo treinado
+def plot_the_model(feature, label, preds):
+    """
+    Gráfico que mostra o modelo treinado contra as features e labels
+    
+    Arguments:
+    feature -- array de features que passámos à rede para treino
+    label -- array de labels correspondentes às features
+    preds -- array de valores previstos pelo modelo
+    """
+    
+    # Nomes para os eixos
+    plt.xlabel("feature")
+    plt.ylabel("label")
+    
+    # Valores das features vs. valores das labels
+    plt.scatter(feature, label)
+    
+    # Cria uma representação a encarnado do modelo.
+    plt.plot(feature, preds, 'r--')
+    
+    # Faz o render do scatter plot e da linha encarnada
+    plt.show()
+
+#@title Gráfico para mostrar o rmse vs. epochs
+def plot_the_loss_curve(epochs, rmse):
+    """
+    Gráfico da curva de perda (loss vs. epoch)
+    
+    Arguments:
+    epochs -- número de épocas
+    rms -- erro quadrático médio
+    
+    """
+    
+    plt.figure()
+    plt.xlabel("Epoch")
+    plt.ylabel("Root Mean Squared Error")
+    
+    plt.plot(epochs, rmse, label="Loss")
+    plt.legend()
+    plt.ylim([rmse.min()*0.97, rmse.max()])
+    plt.show()
+
+</pre>
+<h3>Definir o conjunto de dados</h3>
+Vamos definir quatro funções para as quais queremos que a rede neuronal aprenda a sua representação:
+<ol>
+	<li>\(f(x) = x^2\)</li>
+	<li>\(f(x) = sin(x)\)</li>
+	<li>\(f(x) = |x|\)</li>
+	<li>\(f(x) = H(x)\)</li>
+</ol>
+onde \(H(x)\) é a função Heaviside.
+<pre>
+def draw_points(n, func):
+    """
+    Constroi conjuntos de dados de acordo com a função escolhida
+    
+    Arguments:
+    n -- Total de pontos
+    func -- Tipo de função (Aceita: sin, power_two, abs, heaviside)
+    
+    Returns:
+    feature -- Um array com as features (valores de x)
+    label -- Um array com as labels (valores de y = f(x))
+    """
+    feature = np.sort(np.random.uniform(-1, 1, n))
+    if func == 'sin':
+        label = np.sin(feature)
+    elif func == 'power_two':
+        label = np.power(feature, 2)
+    elif func == 'abs':
+        label = np.abs(feature)
+    elif func == 'heaviside':
+        label = np.heaviside(feature, 0)
+    else:
+        print("Erro")
+        return 0, 0
+        
+    return feature, label    
+</pre>
+Podemos agora gerar dados e ver a rede em acção:
+<pre>
+# Escolher uma das seguintes funções:
+# my_feature, my_label = draw_points(50, func='power_two')
+# my_feature, my_label = draw_points(50, func='sin')
+# my_feature, my_label = draw_points(50, func='abs')
+
+#Heaviside
+my_feature, my_label = draw_points(50, func='heaviside')
+</pre>
+<h3>Configurar os <i>Hyperparameters</i> e treinar o modelo</h3>
+Aqui podemos experimentar diversas combinações dos <i>Hyperparameters</i> para tentar obter o 
+melhor ajustamento.
+
+<pre>
+# Limpa os logs das iterações anteriores
+!rm -rf ./logs/ 
+    
+#Hyperparameters
+learning_rate=0.01
+epochs=100
+my_batch_size=10
+
+my_model = build_model(learning_rate)
+epochs, rmse = train_model(my_model, my_feature, my_label, epochs, my_batch_size)	
+</pre>
+<h3>Fazer previsões e visualizar os resultados.</h3>
+<pre>
+# Fazer previsões
+preds = my_model.predict(my_feature)
+preds = np.squeeze(preds)
+
+# Ver os resultados
+plot_the_model(my_feature, my_label, preds)
+plot_the_loss_curve(epochs, rmse)
+</pre>
+Para este caso concreto da aproximação à função de Heaviside,
+os parâmetros aprendidos pela rede neuronal é razoável:
+<img src="../images/2020-06-24-Linear_Regression_Sythetic_Data_2.png"><br>
+No gráfico de cima, Os pontos a azul representam os dados reais. Os traços a encarnado mostram
+os outputs do modelo treinado. Idealmente a linha vermelha deve alinhar com os pontos azuis.
+Há uma certa aleatoriedade quando o modelo é treinado, de forma que os resultados em cada treino
+poderão ser ligeiramente diferentes.
+O gráfico de baixo mostra a curva de perda. Podemos ver que a curva decresce, o que é bom, mas 
+não fica plana, que é um indicativo que o modelo não treinou o suficiente.
+Se alterarmos os <i>Hyperparameters</i>:
+<pre>
+#Hyperparameters
+learning_rate=0.01
+epochs=200
+my_batch_size=20
+</pre>
+obtemos,
+<img src="../images/2020-06-24-Linear_Regression_Sythetic_Data_3.png">
+
+que melhora o ajuste.
+<h3>Sumário aos ajustes dos <i>Hyperparameters</i>.</h3>
+A maior parte dos problemas de machine learning requerem ajustes em vários parâmetros e o problema é que não há uma receita para cada modelo.<br>
+Se baixarmos a taxa de aprendizagem (learning rate) podemos ajudar determinado modelo a convergir de forma eficiente mas pode fazer com que um outro modelo convirja lentamente. Há que experimentar
+várias combinações do conjunto de <i>Hyperparameters</i> de acordo com o conjunto de dados em estudo. Dito isto, há algumas "regras" para ajudar a escolher os <i>Hyperparameters</i>:
+
+<ul>
+	<li>A função de perda do treino deve decrescer, primeiro de uma forma acentuada e depois mais lentamente até que o declive da curva se apróxima de zero.</li>
+	<li>Se a função de perda do treino não convergir => aumenta o número de épocas</li>
+	<li>Se a função de perda do treino decresce muito lentamente => aumenta a taxa de aprendizagem (learning rate). Atenção porque se a taxa for muito elevada
+		pode fazer com que não haja convergência.</li>
+	<li>Se a função de perda do treino varia de forma descontrolada (altos e baixos acentuados) => diminui a taxa de aprendizagem</li>
+	<li>Diminuir a taxa de aprendizagem e aumentar o número de épocas ou o tamanho do batch, regra geral, é uma boa combinação.</li>
+	<li>Baixar muito o tamanho do batch pode causar alguma instabilidade. Primeiro tenta-se um valor elevado para o tamanho do batch e depois vai-se baixando 
+		aos poucos.</li>
+	<li><b>Importante:</b> A combinação ideal de <i>Hyperparameters</i> é dependente do conjunto de dados em análise, de forma que devemos sempre experimentar
+	várias combinações e verificar os resultados de forma a encontrar a combinação ideal.</li>
+</ul>
+
+
+
+</article>
+      </section>
+    </div>
+  </div>
+
+   <footer>
+  <a href="https://creativecommons.org/licenses/by-nc/3.0/deed.en_US">
+    <span>
+        <b>DeepLearning</b>
+    </span>
+    
+    <span>© 2020</span>
+  </a>
+</footer>
+
+  
+</body>
+
+</html>

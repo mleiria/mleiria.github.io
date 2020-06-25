@@ -300,6 +300,18 @@ várias combinações do conjunto de &lt;i&gt;Hyperparameters&lt;/i&gt; de acord
 	&lt;li&gt;&lt;b&gt;Importante:&lt;/b&gt; A combinação ideal de &lt;i&gt;Hyperparameters&lt;/i&gt; é dependente do conjunto de dados em análise, de forma que devemos sempre experimentar
 	várias combinações e verificar os resultados de forma a encontrar a combinação ideal.&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h3&gt;Arquitectura típica de regressão MLP&lt;/h3&gt;
+&lt;table&gt;
+    &lt;tr&gt;&lt;th&gt;Hyperparameter&lt;/th&gt;&lt;th&gt;Valores típicos&lt;/th&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;# unidades de entrada (&lt;i&gt;input neurons&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;Uma por feature de entrada&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;# camadas escondidas (&lt;i&gt;hidden layers&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;Depende mas tipicamente de 1 a 5&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;# unidades por camada escondida (&lt;i&gt;neurons per hidden layer&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;Depende mas tipicamente de 10 a 100&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;# unidades de saída (&lt;i&gt;output neurons&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;1 por cada dimensão de previsão&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Activação das camadas escondidas (&lt;i&gt;Hidden activation&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;ReLU&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Activação da saída (&lt;i&gt;output activation&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;Nenhuma ou ReLU/softplus (se queremos outputs positivos) ou logistic/tanh (se queremos outputs limitados)&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Função de perda (&lt;i&gt;(oss function&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;MSE ou MAE/Huber (se houver outrliers)&lt;/td&gt;&lt;/tr&gt;
+
+&lt;/table&gt;
 
 
 </description>

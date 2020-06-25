@@ -335,6 +335,18 @@ várias combinações do conjunto de <i>Hyperparameters</i> de acordo com o conj
 	<li><b>Importante:</b> A combinação ideal de <i>Hyperparameters</i> é dependente do conjunto de dados em análise, de forma que devemos sempre experimentar
 	várias combinações e verificar os resultados de forma a encontrar a combinação ideal.</li>
 </ul>
+<h3>Arquitectura típica de regressão MLP</h3>
+<table>
+    <tr><th>Hyperparameter</th><th>Valores típicos</th></tr>
+    <tr><td># unidades de entrada (<i>input neurons</i>)</td><td>Uma por feature de entrada</td></tr>
+    <tr><td># camadas escondidas (<i>hidden layers</i>)</td><td>Depende mas tipicamente de 1 a 5</td></tr>
+    <tr><td># unidades por camada escondida (<i>neurons per hidden layer</i>)</td><td>Depende mas tipicamente de 10 a 100</td></tr>
+    <tr><td># unidades de saída (<i>output neurons</i>)</td><td>1 por cada dimensão de previsão</td></tr>
+    <tr><td>Activação das camadas escondidas (<i>Hidden activation</i>)</td><td>ReLU</td></tr>
+    <tr><td>Activação da saída (<i>output activation</i>)</td><td>Nenhuma ou ReLU/softplus (se queremos outputs positivos) ou logistic/tanh (se queremos outputs limitados)</td></tr>
+    <tr><td>Função de perda (<i>(oss function</i>)</td><td>MSE ou MAE/Huber (se houver outrliers)</td></tr>
+
+</table>
 
 
 

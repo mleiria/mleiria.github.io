@@ -133,7 +133,7 @@ Vamos definir duas funções de forma a conseguirmos visualizar o modelo
 e a curva de perda:
 <ul>
 	<li><pre>plot_the_model(feature, label, preds)</pre> que mostra os pontos originais e uma linha com os pontos previstos pela rede</li> 
-	<li><pre>plot_the_loss_curve</pre> que mostra a curva de perda em função das épocas</li>
+	<li><pre>plot_the_loss_curve(epochs, rmse)</pre> que mostra a curva de perda em função das épocas</li>
 </ul>
 <pre>
 #@title Gráfico para mostrar o modelo treinado
@@ -272,7 +272,7 @@ my_batch_size=20
 </pre>
 obtemos,
 <img src="../images/2020-06-24-Linear_Regression_Sythetic_Data_3.png">
-
+<br>
 que melhora o ajuste.
 <h3>Sumário aos ajustes dos <i>Hyperparameters</i>.</h3>
 A maior parte dos problemas de machine learning requerem ajustes em vários parâmetros e o problema é que não há uma receita para cada modelo.<br>

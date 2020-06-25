@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  Regressão Linear com dados sintéticos
-date:   2020-06-09 16:00:00
+title:  Regressão MLP com dados sintéticos
+date:   2020-06-25 16:00:00
 ---
 
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
@@ -25,7 +25,7 @@ Estes pontos serão depois usados para treinar uma rede neuronal com:
 </ul>
 <p>
 Nota: link para o jupyter notebook com o código completo: 
-<a href="https://github.com/mleiria/mleiria.github.io/blob/master/jupyter-notebook/Linear_Regression_Synthetic_Data.ipynb" target="_blank">Linear_Regression_Synthetic_Data.ipynb</a>
+<a href="https://github.com/mleiria/mleiria.github.io/blob/master/jupyter-notebook/MLP_Regression_Synthetic_Data.ipynb" target="_blank">Linear_Regression_Synthetic_Data.ipynb</a>
 </p>
 
 <i>Hyperparameters</i> que podem ser alterados:
@@ -256,7 +256,7 @@ plot_the_loss_curve(epochs, rmse)
 </pre>
 Para este caso concreto da aproximação à função de Heaviside,
 os parâmetros aprendidos pela rede neuronal é razoável:
-<img src="../images/2020-06-24-Linear_Regression_Sythetic_Data_2.png"><br>
+<img src="../images/2020-06-24-MLP_Regression_Sythetic_Data_2.png"><br>
 No gráfico de cima, Os pontos a azul representam os dados reais. Os traços a encarnado mostram
 os outputs do modelo treinado. Idealmente a linha vermelha deve alinhar com os pontos azuis.
 Há uma certa aleatoriedade quando o modelo é treinado, de forma que os resultados em cada treino
@@ -271,7 +271,7 @@ epochs=200
 my_batch_size=20
 </pre>
 obtemos,
-<img src="../images/2020-06-24-Linear_Regression_Sythetic_Data_3.png">
+<img src="../images/2020-06-24-MLP_Regression_Sythetic_Data_3.png">
 <br>
 que melhora o ajuste.
 <h3>Sumário aos ajustes dos <i>Hyperparameters</i>.</h3>

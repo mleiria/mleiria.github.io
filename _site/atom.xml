@@ -12,7 +12,7 @@
     </author>
     
       <item>
-        <title>Regressão Linear com dados sintéticos</title>
+        <title>Regressão MLP com dados sintéticos</title>
         <description>&lt;script src=&quot;https://polyfill.io/v3/polyfill.min.js?features=es6&quot;&gt;&lt;/script&gt;
 &lt;script id=&quot;MathJax-script&quot; async
           src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot;&gt;
@@ -34,7 +34,7 @@ Estes pontos serão depois usados para treinar uma rede neuronal com:
 &lt;/ul&gt;
 &lt;p&gt;
 Nota: link para o jupyter notebook com o código completo: 
-&lt;a href=&quot;https://github.com/mleiria/mleiria.github.io/blob/master/jupyter-notebook/Linear_Regression_Synthetic_Data.ipynb&quot; target=&quot;_blank&quot;&gt;Linear_Regression_Synthetic_Data.ipynb&lt;/a&gt;
+&lt;a href=&quot;https://github.com/mleiria/mleiria.github.io/blob/master/jupyter-notebook/MLP_Regression_Synthetic_Data.ipynb&quot; target=&quot;_blank&quot;&gt;MLP_Regression_Synthetic_Data.ipynb&lt;/a&gt;
 &lt;/p&gt;
 
 &lt;i&gt;Hyperparameters&lt;/i&gt; que podem ser alterados:
@@ -142,7 +142,7 @@ Vamos definir duas funções de forma a conseguirmos visualizar o modelo
 e a curva de perda:
 &lt;ul&gt;
 	&lt;li&gt;&lt;pre&gt;plot_the_model(feature, label, preds)&lt;/pre&gt; que mostra os pontos originais e uma linha com os pontos previstos pela rede&lt;/li&gt; 
-	&lt;li&gt;&lt;pre&gt;plot_the_loss_curve&lt;/pre&gt; que mostra a curva de perda em função das épocas&lt;/li&gt;
+	&lt;li&gt;&lt;pre&gt;plot_the_loss_curve(epochs, rmse)&lt;/pre&gt; que mostra a curva de perda em função das épocas&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre&gt;
 #@title Gráfico para mostrar o modelo treinado
@@ -265,7 +265,7 @@ plot_the_loss_curve(epochs, rmse)
 &lt;/pre&gt;
 Para este caso concreto da aproximação à função de Heaviside,
 os parâmetros aprendidos pela rede neuronal é razoável:
-&lt;img src=&quot;../images/2020-06-24-Linear_Regression_Sythetic_Data_2.png&quot;&gt;&lt;br&gt;
+&lt;img src=&quot;../images/2020-06-24-MLP_Regression_Sythetic_Data_2.png&quot;&gt;&lt;br&gt;
 No gráfico de cima, Os pontos a azul representam os dados reais. Os traços a encarnado mostram
 os outputs do modelo treinado. Idealmente a linha vermelha deve alinhar com os pontos azuis.
 Há uma certa aleatoriedade quando o modelo é treinado, de forma que os resultados em cada treino
@@ -280,8 +280,8 @@ epochs=200
 my_batch_size=20
 &lt;/pre&gt;
 obtemos,
-&lt;img src=&quot;../images/2020-06-24-Linear_Regression_Sythetic_Data_3.png&quot;&gt;
-
+&lt;img src=&quot;../images/2020-06-24-MLP_Regression_Sythetic_Data_3.png&quot;&gt;
+&lt;br&gt;
 que melhora o ajuste.
 &lt;h3&gt;Sumário aos ajustes dos &lt;i&gt;Hyperparameters&lt;/i&gt;.&lt;/h3&gt;
 A maior parte dos problemas de machine learning requerem ajustes em vários parâmetros e o problema é que não há uma receita para cada modelo.&lt;br&gt;
@@ -303,10 +303,10 @@ várias combinações do conjunto de &lt;i&gt;Hyperparameters&lt;/i&gt; de acord
 
 
 </description>
-        <pubDate>Tue, 09 Jun 2020 17:00:00 +0100</pubDate>
-        <link>http://localhost:4000//Regressao-Linear-Dados-Sinteticos</link>
-        <link href="http://localhost:4000/Regressao-Linear-Dados-Sinteticos"/>
-        <guid isPermaLink="true">http://localhost:4000/Regressao-Linear-Dados-Sinteticos</guid>
+        <pubDate>Thu, 25 Jun 2020 17:00:00 +0100</pubDate>
+        <link>http://localhost:4000//Regressao-MLP-Dados-Sinteticos</link>
+        <link href="http://localhost:4000/Regressao-MLP-Dados-Sinteticos"/>
+        <guid isPermaLink="true">http://localhost:4000/Regressao-MLP-Dados-Sinteticos</guid>
       </item>
     
       <item>

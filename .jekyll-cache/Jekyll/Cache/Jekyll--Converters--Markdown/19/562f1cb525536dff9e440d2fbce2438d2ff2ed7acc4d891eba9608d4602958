@@ -1,8 +1,8 @@
-I"y<ul>
+I"s<ul>
     
       <li>
-          <h2><a href="/Regressao-Linear-Dados-Sinteticos">Regressão Linear com dados sintéticos</a></h2>
-          <time datetime="2020-06-09T17:00:00+01:00">09 Jun 2020</time>
+          <h2><a href="/Regressao-MLP-Dados-Sinteticos">Regressão MLP com dados sintéticos</a></h2>
+          <time datetime="2020-06-25T17:00:00+01:00">25 Jun 2020</time>
           <p>Introdução Vamos analisar a capacidade de um MLP (Multi Layer Perceptron) em aproximar quatro funções diferentes. Em cada caso vamos extrair N = 50 pontos escolhidos uniformemente em x no intervalo (-1, 1) e os correspondentes valores f(x) calculados. Estes pontos serão depois usados para treinar uma rede neuronal com:...</p>
       </li>
     

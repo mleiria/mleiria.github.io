@@ -12,6 +12,136 @@
     </author>
     
       <item>
+        <title>Rede Neuronal - Afinar os Hyperparâmetros</title>
+        <description>&lt;script src=&quot;https://polyfill.io/v3/polyfill.min.js?features=es6&quot;&gt;&lt;/script&gt;
+&lt;script id=&quot;MathJax-script&quot; async
+          src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot;&gt;
+&lt;/script&gt;
+
+
+&lt;h2&gt;Introdução&lt;/h2&gt;
+A flexibilidade de uma rede neuronal, proporcionada pelos diversos hyperparâmetros e das combinações entre eles que 
+podemos fazer, traz-nos um drama: como seleccionar a melhor combinação entre eles. O problema é mesmo este,
+são muitos hyperparâmetroe que podemos combinar. Até um caso simples de uma MLP (Multi Layer Perecepton), em termos de
+hyperparâmetros, podemos seleccionar o nº de camadas (&lt;i&gt;layers&lt;/i&gt;), o número de unidades (&lt;i&gt;neurons&lt;/i&gt;) por
+camada, a função de activação para cada camada, inicialização dos pesos (&lt;i&gt;weights&lt;/i&gt;), a taxa de 
+aprendizagem (&lt;i&gt;learning rate&lt;/i&gt;), entre outros.
+&lt;br&gt;
+A opção mais simples é tentar várias combinações e ver qual destas traz melhores resultados no conjunto de dados
+de validação.
+&lt;br&gt;
+Por exemplo, podemos usar o &lt;b&gt;&lt;i&gt;sklearn.model_selection.RandomizedSearchCV&lt;/i&gt;&lt;/b&gt; para explorar o espaço dos hyperparâmetros.
+&lt;p&gt;
+Nota: link para o jupyter notebook com o código completo: &lt;br&gt;
+&lt;a href=&quot;https://github.com/mleiria/mleiria.github.io/blob/master/jupyter-notebook/FineTunning_NN-Hyperparams.ipynb&quot; target=&quot;_blank&quot;&gt;MLP_Regression_Synthetic_Data.ipynb&lt;/a&gt;
+&lt;br&gt;ou Colab:&lt;br&gt;
+&lt;a href=&quot;https://colab.research.google.com/drive/1ETQe_CNwZGQY-m9NkPhhc8hPlQOdan11?usp=sharing&quot; target=&quot;_blank&quot;&gt;MLP_Regression_Synthetic_Data.ipynb&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;h2&gt;Modelo Keras&lt;/h2&gt;
+Comecemos por importar as classes necessárias.
+&lt;pre&gt;
+import sklearn
+from sklearn.model_selection import RandomizedSearchCV
+from scipy.stats import reciprocal
+from tensorflow import keras
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+print('The scikit-learn version is {}.'.format(sklearn.__version__))
+&lt;/pre&gt;
+&lt;b&gt;out:&lt;/b&gt;
+&lt;pre&gt;
+The scikit-learn version is 0.21.2.
+&lt;/pre&gt;
+Criar uma função que constrói e compila um modelo Keras, dados um conjunto de hyperparâmetros:
+&lt;pre&gt;
+def build_model(n_hidden=3, n_neurons=30, lr=1e-3, input_shape=[3]):
+    &quot;&quot;&quot;
+    Constrói um modelo Keras com base nos parâmetros de entrada.
+    
+    :param n_hidden: Número de camadas escondidas (hidden layers)
+    :param n_neurons: Número de unidades por camada
+    :param lr: Taxa de aprendizagem (learning rate)
+    :param input_shape: Formato dos dados de entrada
+    :return: Um modelo Keras do tipo Sequencial
+    &quot;&quot;&quot;
+    model = keras.models.Sequential()
+    model.add(keras.layers.InputLayer(input_shape=input_shape))
+    # com n_hidden camadas densas escondidas
+    # Função de activação relu
+    for i in range(n_hidden):
+        model.add(keras.layers.Dense(n_neurons, activation='relu'))
+    # Camada de saída
+    # Perda medida pelo mse (mean squared error)
+    # Optimizador SGD (Stochastic Gradiente Descent)
+    model.add(keras.layers.Dense(1))
+    model.compile(loss='mse', optimizer=keras.optimizers.SGD(lr=lr))
+    return model
+&lt;/pre&gt;
+A função supra cria um modelo Sequencial simples para uma regressão univariada (só um neurónio de saída),
+com um dado formato (ou dimensão) de dados de entrada (no exemplo, 3 &lt;i&gt;features&lt;/i&gt;) e dados o número de
+camadas e neurónios por camada. De seguida o modelo é compilado e usa o optimizador SGD com a taxa de aprendizagem
+também ela especificada como parâmetro de entrada. É boa prática fornecer sempre valores, razoáveis, por defeito 
+ao maior número possível de hyperparâmetros.
+&lt;br&gt;
+&lt;h3&gt;Criar um regressor &lt;b&gt;&lt;i&gt;KerasRegressor&lt;/i&gt;&lt;/b&gt; com base na função &lt;b&gt;&lt;i&gt;build_model()&lt;/i&gt;&lt;/b&gt;&lt;/h3&gt;
+&lt;pre&gt;keras_reg = keras.wrappers.scikit_learn.KerasRegressor(build_model)&lt;/pre&gt;
+O objecto &lt;b&gt;&lt;i&gt;KerasRegressor&lt;/i&gt;&lt;/b&gt;é um &lt;i&gt;wrapper&lt;/i&gt; sobre o modelo Keras construído. Como não 
+especificámos nenhum hyperparâmetro na sua criação, ele vai usar os valores por defeito que foram definidos
+no &lt;b&gt;&lt;i&gt;build_model()&lt;/i&gt;&lt;/b&gt;. Agora podemos usar este objecto como um regressor Scikit-Learn, i.e., podemos
+treiná-lo usando o método &lt;b&gt;&lt;i&gt;fit()&lt;/i&gt;&lt;/b&gt; e posteriormente avaliá-lo com o método &lt;b&gt;&lt;i&gt;score()&lt;/i&gt;&lt;/b&gt;. 
+Finalmente, para as previsões usamos o método &lt;b&gt;&lt;i&gt;predict()&lt;/i&gt;&lt;/b&gt;. O código seguinte exemplifica:
+
+&lt;pre&gt;
+keras_reg.fit(x_train, y_train, epochs=100,
+                  validation_data=(x_valid, y_valid),
+                  callbacks=[tf.keras.callbacks.EarlyStopping(patience=10)])
+
+mse_test = keras_reg.score(x_test, y_test)
+y_pred = keras_reg.predict(x_new
+&lt;/pre&gt;
+ Qualquer parâmetro extra que passe para o método &lt;b&gt;&lt;i&gt;fit()&lt;/i&gt;&lt;/b&gt;, será passado para o modelo
+ Keras subjacente. Atenção que o &lt;i&gt;score&lt;/i&gt; é o oposto do &lt;i&gt;MSE&lt;/i&gt; porque o Scikit-Learn recebe
+ &lt;i&gt;scores&lt;/i&gt; e não perdas (i.e., quanto maior, melhor).
+ &lt;p&gt;
+ Agora o que queremos é testar várias combinações de hyperparâmetros e ver qual delas é a melhor. Como
+ temos muitos hyperparâmetros, a pesquisa aleatória (&lt;i&gt;randomized search&lt;/i&gt;) faz mais sentido do que a pesquisa
+ em rede (&lt;i&gt;grid search&lt;/i&gt;). Exploremos o número de camadas escondidas, neurónios e taxa de aprendizagem:
+ &lt;/p&gt;
+&lt;pre&gt;
+from sklearn.model_selection import RandomizedSearchCV
+from scipy.stats import reciprocal
+
+search_params = {
+    'n_hidden': [1, 3, 5, 7],
+    'n_neurons': np.arange(1, 100),
+    'lr': reciprocal(3e-4, 3e-2)
+}
+
+rnd_search = RandomizedSearchCV(keras_reg, search_params, cv=3, n_iter=10)
+rnd_search.fit(x_train, y_train, epochs=100, validation_data=(x_valid, y_valid),
+               callbacks=[keras.callbacks.EarlyStopping(patience=10)])	
+&lt;/pre&gt;
+
+Estes parâmetros extra que passamos para o método &lt;b&gt;&lt;i&gt;fit()&lt;/i&gt;&lt;/b&gt; serão passados para o modelo Keras.
+Note-se que o &lt;b&gt;&lt;i&gt;RandomizedSearchCV&lt;/i&gt;&lt;/b&gt; usa a validação &lt;i&gt;K-fold cross validation&lt;/i&gt; de forma que 
+não usa &lt;b&gt;&lt;i&gt;x_valid&lt;/i&gt;&lt;/b&gt; e &lt;b&gt;&lt;i&gt;y_valid&lt;/i&gt;&lt;/b&gt;. Estes só servem para o &lt;b&gt;&lt;i&gt;EarlyStopping&lt;/i&gt;&lt;/b&gt;.
+Quando este procedimento acabar, podemos aceder aos melhores parâmetros e ao melhor score:
+
+&lt;pre&gt;
+print(rnd_search.best_params_)
+print(rnd_search.best_score_)
+&lt;/pre&gt;
+
+</description>
+        <pubDate>Thu, 25 Jun 2020 17:00:00 +0100</pubDate>
+        <link>http://localhost:4000//FT_NN_Hyperparams</link>
+        <link href="http://localhost:4000/FT_NN_Hyperparams"/>
+        <guid isPermaLink="true">http://localhost:4000/FT_NN_Hyperparams</guid>
+      </item>
+    
+      <item>
         <title>Regressão MLP com dados sintéticos</title>
         <description>&lt;script src=&quot;https://polyfill.io/v3/polyfill.min.js?features=es6&quot;&gt;&lt;/script&gt;
 &lt;script id=&quot;MathJax-script&quot; async
@@ -309,7 +439,7 @@ várias combinações do conjunto de &lt;i&gt;Hyperparameters&lt;/i&gt; de acord
     &lt;tr&gt;&lt;td&gt;# unidades de saída (&lt;i&gt;output neurons&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;1 por cada dimensão de previsão&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;&lt;td&gt;Activação das camadas escondidas (&lt;i&gt;Hidden activation&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;ReLU&lt;/td&gt;&lt;/tr&gt;
     &lt;tr&gt;&lt;td&gt;Activação da saída (&lt;i&gt;output activation&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;Nenhuma ou ReLU/softplus (se queremos outputs positivos) ou logistic/tanh (se queremos outputs limitados)&lt;/td&gt;&lt;/tr&gt;
-    &lt;tr&gt;&lt;td&gt;Função de perda (&lt;i&gt;(oss function&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;MSE ou MAE/Huber (se houver outrliers)&lt;/td&gt;&lt;/tr&gt;
+    &lt;tr&gt;&lt;td&gt;Função de perda (&lt;i&gt;loss function&lt;/i&gt;)&lt;/td&gt;&lt;td&gt;MSE ou MAE/Huber (se houver outliers)&lt;/td&gt;&lt;/tr&gt;
 
 &lt;/table&gt;
 

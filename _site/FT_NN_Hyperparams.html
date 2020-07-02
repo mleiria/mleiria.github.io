@@ -23,7 +23,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-25T17:00:00+01:00" />
 <script type="application/ld+json">
-{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/FT_NN_Hyperparams"},"@type":"BlogPosting","url":"http://localhost:4000/FT_NN_Hyperparams","headline":"Rede Neuronal - Afinar os Hyperparâmetros","datePublished":"2020-06-25T17:00:00+01:00","dateModified":"2020-06-25T17:00:00+01:00","author":{"@type":"Person","name":"MLeiria"},"description":"A Deep Learning Blog","@context":"https://schema.org"}</script>
+{"datePublished":"2020-06-25T17:00:00+01:00","dateModified":"2020-06-25T17:00:00+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/FT_NN_Hyperparams"},"url":"http://localhost:4000/FT_NN_Hyperparams","author":{"@type":"Person","name":"MLeiria"},"description":"A Deep Learning Blog","headline":"Rede Neuronal - Afinar os Hyperparâmetros","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -120,7 +120,7 @@ camadas e neurónios por camada. De seguida o modelo é compilado e usa o optimi
 também ela especificada como parâmetro de entrada. É boa prática fornecer sempre valores, razoáveis, por defeito 
 ao maior número possível de hyperparâmetros.
 <br>
-<h3>Criar um regressor <b><i>KerasRegressor</i></b> com base na função <b><i>build_model()</i></b></h3>
+<h2>Criar um regressor <b><i>KerasRegressor</i></b> com base na função <b><i>build_model()</i></b></h2>
 <pre>keras_reg = keras.wrappers.scikit_learn.KerasRegressor(build_model)</pre>
 O objecto <b><i>KerasRegressor</i></b>é um <i>wrapper</i> sobre o modelo Keras construído. Como não 
 especificámos nenhum hyperparâmetro na sua criação, ele vai usar os valores por defeito que foram definidos
@@ -168,8 +168,43 @@ Quando este procedimento acabar, podemos aceder aos melhores parâmetros e ao me
 print(rnd_search.best_params_)
 print(rnd_search.best_score_)
 </pre>
-
-
+<h2>Algumas considerações finais</h2>
+<h3>Número de camadas escondidas</h3>
+Para muitos problemas podemos começar com uma única camada escondida e quase de certeza que obtemos bons resultados.
+Em princípio, uma MLP com uma só camada escondida consegue modelar qualquer função desde que tenha neurónios suficientes,
+o que não quer dizer que seja a solução óptima. Para problemas complexos temos de encontrar o balanço entre o número de 
+camadas escondidas e o número de neurónios por camada.
+<h3>Número de neurónios por camada escondida</h3>
+O número de neurónios nas camadas de entrada e saída são dependentes do tipo de dados de entrada e pelo tipo de 
+tarefa que temos em mãos. No exemplo supra, temos três neurónios de entrada (porque temos três features. No exemplo são 
+dados sintéticos mas poderiam ser, por exemplo, o número de divisões de um apartamento, o total em metros quadrados do 
+apartamento e a zona e o output seria o preço do apartamento) e um neurónio de saída.<br>
+Para as camadas escondidas, era comum  escolher o número de neurónios de forma a fazer uma pirâmide com cada vez menos
+neuŕonios em cada camada. Por exemplo, uma tipica rede neuronal para o conjunto de dados <a href="https://en.wikipedia.org/wiki/MNIST_database">MNIST</a>
+teria a seguinte arquitectura: 3 camadas escondidas, onde a primeira camada tem 300 neurónios, a segunda 200 e a terceira 100.
+Esta prática tem sido abandonada porque a experiência mostra que usando o mesmo número de neurónios em todas as
+camadas escondidas traz tão bons, ou melhores resultados, que o esquema em pirâmide. Traz ainda a vantagem de ficarmos
+só com um hyperparâmetro para afinar em vez de um por camada. De qualquer forma e dependente do conjunto de dados que 
+temos em mãos, às vezes ajuda fazer a primeira camada escondida maior do que as outras.
+<p>
+Tal como o número de camadas, podemos tentar aumentar o número de neurónios gradualmente até a rede começar a 
+fazer <i>overfitting</i>.Na prática é muito mais simples e eficiente escolher um modelo com mais camadas e 
+mais neurónios do que o necessário e depois usar <i>early stopping</i> e outras técnicas de regularização para prevenir o 
+<i>overfitting.</i>
+</p>
+<h3>Taxa de aprendizagem</h3>
+Sem dúvida o hyperparâmetro mais importante. Uma boa forma de encontrar o melhor valor é treinar o modelo durante 
+umas centenas de iterações , começando com um valor bastante baixo (e.g. \(10^{-5}\)) e gradualmente ir aumentando 
+até um valor alto (e.g., 10). Acompanhar este exercício com uma visualização gráfica da função de perda em vs taxa
+de aprendizagem.
+<h3>Optimizador</h3>
+Há vários para além do clássico <i>Mini-batch Gradient Descent</i> e fazer uma escolha cuidada é importante.
+<h3>Tamanho do batch</h3>
+Esta escolha é muito dependente do hardware que temos em mãos para treinar a rede. Valores elevados
+para o tamanho do batch requeremm aceleradores de hardware (GPUs).
+<h3>Função de activação</h3>
+De uma forma geral, a função de activação ReLU é uma boa escolha para ser usada pelas camadas escondidas. Para a 
+camada de saída (<i>output layer</i>), depende da tarefa em mãos.
 </article>
       </section>
     </div>

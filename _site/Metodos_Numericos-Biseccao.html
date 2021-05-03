@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <meta name="generator" content="Jekyll">
+
+  <title>Métodos Numéricos - Bisecção</title>
+
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="ATOM Feed" /> <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Métodos Numéricos - Bisecção | Deep Learning-Blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Métodos Numéricos - Bisecção" />
+<meta name="author" content="MLeiria" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A Deep Learning Blog" />
+<meta property="og:description" content="A Deep Learning Blog" />
+<link rel="canonical" href="http://localhost:4000/Metodos_Numericos-Biseccao" />
+<meta property="og:url" content="http://localhost:4000/Metodos_Numericos-Biseccao" />
+<meta property="og:site_name" content="Deep Learning-Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-05-03T14:00:00+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/Metodos_Numericos-Biseccao"},"url":"http://localhost:4000/Metodos_Numericos-Biseccao","datePublished":"2021-05-03T14:00:00+01:00","author":{"@type":"Person","name":"MLeiria"},"headline":"Métodos Numéricos - Bisecção","description":"A Deep Learning Blog","dateModified":"2021-05-03T14:00:00+01:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+  <div id="wrapper">
+    <header>
+  <div>
+    <a href="/">
+    
+    <h1>deeplearning@home:~$</h1>
+    </a>
+    <div class="header-links">
+      <a href="/archive"><h2 class="header-link">Archive</h2></a>
+<a href="/about"><h2 class="header-link">About</h2></a>
+<a href="/atom.xml"><h2 class="header-link">RSS</h2></a>
+    </div>
+  </div>
+</header>
+    <div class="container">
+      <section id="main_content">
+        <article>
+  <h2>Métodos Numéricos - Bisecção</h2>
+  <time datetime="2021-05-03T14:00:00+01:00" class="by-line">03 May 2021</time>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<h2>Introdução</h2>
+<p>O método da Bisecção é um método numérico que permite calcular o valor (aproximado) das raizes de uma equação não linear.</p>
+Para garantir a solução, usando este método, as seguintes condições têm de se verificar:
+<p>
+	<ol>
+		<li><i>f</i> contínua em <i>[a, b]</i></li>
+		<li><i>f(a)f(b) < 0</i></li>
+		<li>Só existe um zero no interior do intervalo <i>[a, b]</i></li>
+	
+</ol>
+</p>
+<p>
+	As condições (1) e (2) sugerem-nos um processo bastante simples para obter uma aproximação do zero de uma função. Supondo que só existe um zero da função <i>f</i> no interior do intervalo
+	<i>[a, b]</i> (condição (3)), o processo consiste em dividir o intervalo dado ao meio e testar de novo a condição (2) nos subintervalos \[ [a, \frac{a + b}{2}]\] e \[ [ \frac{a + b}{2}, b] \]
+	para determinar qual deles contém a raiz. O processo é repetido para o novo subintervalo até que se obtenha uma precisão prefixada.
+
+</p>
+<h2>Pseudocódigo</h2>
+<strong>Condição suficiente de convergência do método</strong><p>
+<i>- f contínua em [a, b]</i><br>
+<i>- f(a)f(b) < 0</i><p>
+<strong>Inicialização</strong><p>
+<i>a<sub>0</sub> = a, b<sub>0</sub> = b, x<sub>0</sub> = a ou x<sub>0</sub> = b</i><p>
+<strong>Ciclo</strong><p>
+Para \[ m \ge 0 \] fazer \[ x_{m+1} = \frac{a_m + b_m}{2}\]
+Se \( |x_{m+1} - x_m | \le \epsilon \) ou \( |f(x_{m+1})| \le \epsilon \) <p>
+então fazer <i>x<sub>m+1</sub></i> e retornar. <p>
+Caso contrário: <p>
+Se \[ f(x_{m+1})f(a_m) < 0\] então fazer:<p> \( a_{m+1} = a_m \) e \( b_{m+1} = x_{m+1} \)<p>
+Se não fazer: <p>
+\(a_{m+1} = x_{m+1} \) e \(b_{m+1} = b_m \)<p>
+
+<h2>Implementação em Java</h2>
+Consideremos a seguinte função:
+\[ f(x) = x^3 - x - 2.0\]
+
+e queremos encontrar o zero da funçaõ dentro do intervalo <i>[1.0, 2.0]</i>
+<img src="../images/2021-05-03-Metodos_Numericos-Biseccao_1.png"><p>
+
+<h3>Estilo imperativo</h3>
+<pre>
+package pt.mleiria.numericalmethods.rootfinder;
+
+import java.util.Optional;
+import java.util.function.*;
+
+/**
+ * Condições a verificar:
+ * 1. f contínua em [a,b]
+ * 2. f(a)f(b) < 0
+ * 3. QUalquer que x pertencente a ]a,b[ , f'(x) != 0
+ */
+public class BissectionImperative {
+
+    private final double a;
+    private final double b;
+    private final ToDoubleFunction<Double> f;
+    private final double epsilon;
+    private final long maxIter;
+
+    private double am;
+    private double bm;
+    private double xm, xm1;
+
+    /**
+     * Condição suficiente de convergência do método:
+     * - f contínua em [a,b]
+     * - f(a)f(b) < 0
+     */
+    public BissectionImperative(final double a, final double b, ToDoubleFunction<Double> f,
+                                final double epsilon, final long maxIter) {
+        this.a = a;
+        this.b = b;
+        this.f = f;
+        this.epsilon = epsilon;
+        this.maxIter = maxIter;
+        init();
+    }
+
+    private void init() {
+        am = a;
+        bm = b;
+        xm = a;
+    }
+
+    ToDoubleBiFunction<Double, Double> step = (elem1, elem2) -> (elem1 + elem2) / 2.0;
+
+    public Optional<Double> findRoot() {
+        for (int i = 0; i < maxIter; i++) {
+            xm1 = step.applyAsDouble(am, bm);
+            double tmp = Math.abs(xm1 - xm);
+            double tmp1 = Math.abs(f.applyAsDouble(xm1));
+
+            if (tmp <= epsilon || tmp1 <= epsilon) {
+                return Optional.of(xm1);
+            } else {
+                if ((f.applyAsDouble(xm1) * f.applyAsDouble(am)) < 0) {
+                    bm = xm1;
+                } else {
+                    am = xm1;
+                }
+                System.out.printf("%d    %.12f    %.12f    %n", i, xm, f.applyAsDouble(xm));
+                xm = xm1;
+            }
+        }
+        return Optional.empty();
+    }
+
+
+
+    public static void main(String[] args) {
+        ToDoubleFunction<Double> f = elem -> Math.pow(elem, 3) - elem - 2.0;
+        double a = 1.0;
+        double b = 2.0;
+        double epsilon = 0.0000001;
+        BissectionImperative bissectionImperative = new BissectionImperative(a, b, f, epsilon, 100);
+        //1.521484375
+        System.out.println(bissectionImperative.findRoot());
+    }
+}
+
+</pre>
+<p>
+<pre>
+0    1.000000000000    -2.000000000000    
+1    1.500000000000    -0.125000000000    
+2    1.750000000000    1.609375000000    
+3    1.625000000000    0.666015625000    
+4    1.562500000000    0.252197265625    
+5    1.531250000000    0.059112548828    
+6    1.515625000000    -0.034053802490    
+7    1.523437500000    0.012250423431    
+8    1.519531250000    -0.010971248150    
+9    1.521484375000    0.000622175634    
+10    1.520507812500    -0.005178886466    
+11    1.520996093750    -0.002279443317    
+12    1.521240234375    -0.000828905861    
+13    1.521362304688    -0.000103433124    
+14    1.521423339844    0.000259354252    
+15    1.521392822266    0.000077956314    
+16    1.521377563477    -0.000012739468    
+17    1.521385192871    0.000032608157    
+18    1.521381378174    0.000009934278    
+19    1.521379470825    -0.000001402611    
+20    1.521380424500    0.000004265829    
+Optional[1.5213797092437744]
+</pre>
+</p>
+<h3>Estilo funcional</h3>
+<pre>
+package pt.mleiria.numericalmethods.rootfinder;
+
+import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
+import java.util.function.ToDoubleBiFunction;
+import java.util.function.ToDoubleFunction;
+
+public class Bissection {
+
+    private static final double epsilon = 1E-10;
+    private static final long maxIter = 100;
+    /**
+     * Step condition
+     */
+    private static ToDoubleBiFunction<Double, Double> step = (elem1, elem2) -> (elem1 + elem2) / 2.0;
+
+
+    private static Optional<Double> findRoot(final ToDoubleFunction f, final double am, final double bm,
+                                             final double xm, final long cnt) {
+        System.out.printf("%d    %.12f    %.12f    %n", cnt, xm, f.applyAsDouble(xm));
+        if (cnt == maxIter) {
+            return Optional.empty();
+        }
+        final double xm1 = step.applyAsDouble(am, bm);
+        final BiPredicate<Double, Double> foundCondition = (elem1, elem2) -> elem1 <= epsilon || elem2 <= epsilon;
+        final Predicate<Double> iterateCondition = elem -> elem < 0;
+
+        if (foundCondition.test(Math.abs(xm1 - xm), Math.abs(f.applyAsDouble(xm1)))) {
+            return Optional.of(xm1);
+        } else {
+            if (iterateCondition.test(f.applyAsDouble(xm1) * f.applyAsDouble(am))) {
+                return findRoot(f, am, xm1, xm1, cnt + 1);
+            } else {
+                return findRoot(f, xm1, bm, xm1, cnt + 1);
+            }
+        }
+    }
+
+    /**
+     * @param f
+     * @param am
+     * @param bm
+     * @return the root of the function or empty
+     */
+    public static Optional<Double> findRoot(final ToDoubleFunction f, final double am, final double bm) {
+        return findRoot(f, am, bm, am, 0);
+    }
+
+    public static void main(String[] args) {
+        final ToDoubleFunction<Double> f = x -> Math.pow(x, 3) - x - 2.0;
+        System.out.println(Bissection.findRoot(f, 1.0, 2.0));
+
+    }
+}
+
+</pre>
+<p>
+<pre>
+0    1.000000000000    -2.000000000000    
+1    1.500000000000    -0.125000000000    
+2    1.750000000000    1.609375000000    
+3    1.625000000000    0.666015625000    
+4    1.562500000000    0.252197265625    
+5    1.531250000000    0.059112548828    
+6    1.515625000000    -0.034053802490    
+7    1.523437500000    0.012250423431    
+8    1.519531250000    -0.010971248150    
+9    1.521484375000    0.000622175634    
+10    1.520507812500    -0.005178886466    
+11    1.520996093750    -0.002279443317    
+12    1.521240234375    -0.000828905861    
+13    1.521362304688    -0.000103433124    
+14    1.521423339844    0.000259354252    
+15    1.521392822266    0.000077956314    
+16    1.521377563477    -0.000012739468    
+17    1.521385192871    0.000032608157    
+18    1.521381378174    0.000009934278    
+19    1.521379470825    -0.000001402611    
+20    1.521380424500    0.000004265829    
+21    1.521379947662    0.000001431608    
+22    1.521379709244    0.000000014498    
+23    1.521379590034    -0.000000694057    
+24    1.521379649639    -0.000000339779    
+25    1.521379679441    -0.000000162641    
+26    1.521379694343    -0.000000074071    
+27    1.521379701793    -0.000000029787    
+28    1.521379705518    -0.000000007644    
+29    1.521379707381    0.000000003427    
+30    1.521379706450    -0.000000002109    
+31    1.521379706915    0.000000000659    
+32    1.521379706683    -0.000000000725    
+Optional[1.5213797067990527]
+</pre>
+
+
+
+
+</article>
+      </section>
+    </div>
+  </div>
+
+   <footer>
+  <a href="https://creativecommons.org/licenses/by-nc/3.0/deed.en_US">
+    <span>
+        <b>DeepLearning</b>
+    </span>
+    
+    <span>© 2021</span>
+  </a>
+</footer>
+
+  
+</body>
+
+</html>

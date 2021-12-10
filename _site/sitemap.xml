@@ -21,6 +21,14 @@
 <lastmod>2021-05-03T14:00:00+01:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/Amazon_AWS</loc>
+<lastmod>2021-06-04T13:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/Metodos_Numericos-Biseccao_ScalaImpl</loc>
+<lastmod>2021-12-10T13:00:00+00:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/404</loc>
 </url>
 <url>
@@ -34,5 +42,8 @@
 </url>
 <url>
 <loc>http://localhost:4000/page/2/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/page/3/</loc>
 </url>
 </urlset>

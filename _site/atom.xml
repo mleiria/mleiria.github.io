@@ -12,6 +12,467 @@
     </author>
     
       <item>
+        <title>Métodos Numéricos - Bisecção (implementação em Scala)</title>
+        <description>&lt;script src=&quot;https://polyfill.io/v3/polyfill.min.js?features=es6&quot;&gt;&lt;/script&gt;
+&lt;script id=&quot;MathJax-script&quot; async
+          src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot;&gt;
+&lt;/script&gt;
+
+&lt;h2&gt;Introdução&lt;/h2&gt;
+&lt;p&gt;O método da Bisecção (ver &lt;a href=&quot;https://mleiria.github.io/Metodos_Numericos-Biseccao&quot;&gt;Metodos_Numericos-Biseccao&lt;/a&gt;) mas com uma implementação em Scala&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/mleiria/a7c1b9ddb9422e74cd33d2197fefb281.js&quot;&gt;&lt;/script&gt;
+&lt;p&gt;
+&lt;pre&gt;
+0    1,000000000000    -2,000000000000    
+1    1,500000000000    -0,125000000000    
+2    1,750000000000    1,609375000000    
+3    1,625000000000    0,666015625000    
+4    1,562500000000    0,252197265625    
+5    1,531250000000    0,059112548828    
+6    1,515625000000    -0,034053802490    
+7    1,523437500000    0,012250423431    
+8    1,519531250000    -0,010971248150    
+9    1,521484375000    0,000622175634    
+10    1,520507812500    -0,005178886466    
+11    1,520996093750    -0,002279443317    
+12    1,521240234375    -0,000828905861    
+13    1,521362304688    -0,000103433124    
+14    1,521423339844    0,000259354252    
+15    1,521392822266    0,000077956314    
+16    1,521377563477    -0,000012739468    
+17    1,521385192871    0,000032608157    
+18    1,521381378174    0,000009934278    
+19    1,521379470825    -0,000001402611    
+20    1,521380424500    0,000004265829    
+21    1,521379947662    0,000001431608    
+22    1,521379709244    0,000000014498    
+23    1,521379590034    -0,000000694057    
+24    1,521379649639    -0,000000339779    
+25    1,521379679441    -0,000000162641    
+26    1,521379694343    -0,000000074071    
+27    1,521379701793    -0,000000029787    
+28    1,521379705518    -0,000000007644    
+29    1,521379707381    0,000000003427    
+30    1,521379706450    -0,000000002109    
+31    1,521379706915    0,000000000659    
+32    1,521379706683    -0,000000000725    
+1.5213797067990527
+&lt;/pre&gt;
+
+
+</description>
+        <pubDate>Fri, 10 Dec 2021 13:00:00 +0000</pubDate>
+        <link>http://localhost:4000//Metodos_Numericos-Biseccao_ScalaImpl</link>
+        <link href="http://localhost:4000/Metodos_Numericos-Biseccao_ScalaImpl"/>
+        <guid isPermaLink="true">http://localhost:4000/Metodos_Numericos-Biseccao_ScalaImpl</guid>
+      </item>
+    
+      <item>
+        <title>Amazon AWS. Cheat Sheet.</title>
+        <description>&lt;script src=&quot;https://polyfill.io/v3/polyfill.min.js?features=es6&quot;&gt;&lt;/script&gt;
+&lt;script id=&quot;MathJax-script&quot; async
+          src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot;&gt;
+&lt;/script&gt;
+&lt;style&gt;
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+&lt;/style&gt;
+&lt;small&gt;Notes taken form &lt;a href=&quot;https://www.oreilly.com/library/view/machine-learning-with/9781789806199/&quot;&gt;Machine Learning with AWS&lt;/a&gt;&lt;/small&gt;
+
+&lt;h2&gt;Amazon S3&lt;/h2&gt;
+&lt;h3&gt;Intro&lt;/h3&gt;
+	&lt;ul&gt;
+		&lt;li&gt;&lt;strong&gt;S3&lt;/strong&gt; is an online cloud object sotrage and retrieval service.&lt;/li&gt;
+		&lt;li&gt;Is a place to store and retrieve files (text files, images, audio, videio,...)&lt;/li&gt;
+		&lt;li&gt;Can easly be used in conjuntion with additional AWS Machine Learning and infrastructure services.&lt;/li&gt;
+		&lt;li&gt;S3 is used to store almost any type of file. We can view it as a sort of file system and the folders, are called &lt;strong&gt;Buckets&lt;/strong&gt;.&lt;/li&gt;
+		&lt;li&gt;A file in a traditional filesystem is an &lt;strong&gt;object&lt;/strong&gt; in S3. You cannot have buckets inside buckets.&lt;br&gt;&lt;/li&gt;
+		&lt;li&gt;Objects stored in Buckets can be accessed from a web server endpoint.&lt;/li&gt;
+	&lt;/ul&gt;
+
+&lt;h3&gt;Core S3 Concepts&lt;/h3&gt;
+&lt;strong&gt;Type of data storable&lt;/strong&gt;: text files, imagesm audio, video,... &lt;br&gt;
+&lt;strong&gt;Objects&lt;/strong&gt;: are the most basic entity stored in S3. Every object contains data, metadata and a key.&lt;br&gt;
+&lt;strong&gt;Keys&lt;/strong&gt;: is the name assigned to an object that uniquely identifies an object inside a bucket.&lt;br&gt;
+&lt;strong&gt;Bucket&lt;/strong&gt;: is the container where you store objects. Are created at root level.You can have multiple buckets , but you cannot have buckets inside buckets.&lt;br&gt;
+&lt;strong&gt;Region&lt;/strong&gt;: refers to the geographical region wheer Amazon S3 stores a Bucket. the pbject storage in a Bucket with different forms is as follows:&lt;br&gt;&lt;br&gt;
+
+ https://s3.amazonaws.com/myBucket/pos_sentiment_leaves_of_grass.txt
+&lt;br&gt;&lt;br&gt; 
+where:&lt;br&gt;
+&lt;ul&gt;
+&lt;li&gt; https://s3.amazonaws.com -&gt; S3 Endpoint&lt;/li&gt;	
+&lt;li&gt;myBucket -&gt; Bucket Name&lt;/li&gt;
+&lt;li&gt;pos_sentiment_leaves_of_grass.txt -&gt; Key&lt;/li&gt;
+&lt;li&gt;myBucket/pos_sentiment_leaves_of_grass.txt -&gt; Globally unique key&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;S3 Operations&lt;/h3&gt;
+The S3 API includes the following operations:
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Bucket&lt;/strong&gt;: Create, Delete and List keys in a Bucket.&lt;/li&gt;	
+&lt;li&gt;&lt;strong&gt;Object&lt;/strong&gt;: Write, Read and Delete.&lt;/li&gt;	
+&lt;/ul&gt;
+&lt;/p&gt;
+&lt;h2&gt;Summarizing Text Documents Using NLP&lt;/h2&gt;
+&lt;h3&gt;Amazon Comprehend&lt;/h3&gt;
+&lt;ul&gt;
+	&lt;li&gt;Is a Natural Language Processing (NLP) Service.&lt;/li&gt;
+	&lt;li&gt;Processes any text file in UTF-8 format. It uses a pre-trained model to examine a document or set of documents, in order to gather insights about the document set.&lt;/li&gt;
+	&lt;li&gt;Amazon continuosly trains the model so there'se no need to provide training dadta.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;First Step: Analyze the text data to determine the dominant language.&lt;/h4&gt;
+For this step we have to operations available:
+&lt;ol&gt;
+	&lt;li&gt;&lt;strong&gt;DetectDominantLanguage&lt;/strong&gt;:accepts a UTF-8 text string greater than 20 characters and less than 5,000 bytes of UTF-8 encoded characters.&lt;/li&gt;
+	&lt;li&gt;&lt;strong&gt;BatchDetectDominantLanguage&lt;/strong&gt;:accepts an array of strings as a list wiht a maximum of 25 documents. For each document the above rule for the size applies.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;DetectDominantLanguage&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;
+# import the AWS SDK for python (boto3) - http://boto3.readthedocs.io/en/latest/
+import boto3
+# import json module to serialize JSON - https://docs.python.org/3.6/library/json.html
+import json
+
+# instantiate a new comprehend client
+comprehend = boto3.client(service_name='comprehend', region_name='eu-west-2')
+
+# provide english and spanish text to analyze
+english_string = 'Machine Learning is fascinating.'
+spanish_string = 'El aprendizaje automático es fascinante.'
+portuguese_string = 'Olá, eu chamo-me Manuel Aleixo de Sousa Leiria'
+
+print('Calling DetectDominantLanguage')
+
+print('english_string result:')
+# json.dumps() writes JSON data to a Python string
+print(json.dumps(comprehend.detect_dominant_language(Text = english_string), sort_keys=True, indent=4))
+
+print('\n spanish_string result:')
+print(json.dumps(comprehend.detect_dominant_language(Text = spanish_string), sort_keys=True, indent=4))
+print('End of DetectDominantLanguage\n')
+
+print('\n portuguese_string result:')
+print(json.dumps(comprehend.detect_dominant_language(Text = portuguese_string), sort_keys=True, indent=4))
+print('End of DetectDominantLanguage\n')	
+
+&lt;/pre&gt;
+Output:
+&lt;pre&gt;
+Calling DetectDominantLanguage
+english_string result:
+{
+    &quot;Languages&quot;: [
+        {
+            &quot;LanguageCode&quot;: &quot;en&quot;,
+            &quot;Score&quot;: 0.9943646192550659
+        }
+    ],
+    &quot;ResponseMetadata&quot;: {
+        &quot;HTTPHeaders&quot;: {
+            &quot;content-length&quot;: &quot;64&quot;,
+            &quot;content-type&quot;: &quot;application/x-amz-json-1.1&quot;,
+            &quot;date&quot;: &quot;Mon, 07 Jun 2021 17:31:03 GMT&quot;,
+            &quot;x-amzn-requestid&quot;: &quot;0dcc2001-6c79-4dae-8fe8-c76ef316814e&quot;
+        },
+        &quot;HTTPStatusCode&quot;: 200,
+        &quot;RequestId&quot;: &quot;0dcc2001-6c79-4dae-8fe8-c76ef316814e&quot;,
+        &quot;RetryAttempts&quot;: 0
+    }
+}
+
+ spanish_string result:
+{
+    &quot;Languages&quot;: [
+        {
+            &quot;LanguageCode&quot;: &quot;es&quot;,
+            &quot;Score&quot;: 0.9700182676315308
+        }
+    ],
+    &quot;ResponseMetadata&quot;: {
+        &quot;HTTPHeaders&quot;: {
+            &quot;content-length&quot;: &quot;64&quot;,
+            &quot;content-type&quot;: &quot;application/x-amz-json-1.1&quot;,
+            &quot;date&quot;: &quot;Mon, 07 Jun 2021 17:31:03 GMT&quot;,
+            &quot;x-amzn-requestid&quot;: &quot;2b463941-89eb-42a3-b577-45ed0fd351ee&quot;
+        },
+        &quot;HTTPStatusCode&quot;: 200,
+        &quot;RequestId&quot;: &quot;2b463941-89eb-42a3-b577-45ed0fd351ee&quot;,
+        &quot;RetryAttempts&quot;: 0
+    }
+}
+End of DetectDominantLanguage
+
+
+ portuguese_string result:
+{
+    &quot;Languages&quot;: [
+        {
+            &quot;LanguageCode&quot;: &quot;pt&quot;,
+            &quot;Score&quot;: 0.991827130317688
+        }
+    ],
+    &quot;ResponseMetadata&quot;: {
+        &quot;HTTPHeaders&quot;: {
+            &quot;content-length&quot;: &quot;63&quot;,
+            &quot;content-type&quot;: &quot;application/x-amz-json-1.1&quot;,
+            &quot;date&quot;: &quot;Mon, 07 Jun 2021 17:31:03 GMT&quot;,
+            &quot;x-amzn-requestid&quot;: &quot;4d83167b-9e50-4d3a-9e9f-a8c5c521c159&quot;
+        },
+        &quot;HTTPStatusCode&quot;: 200,
+        &quot;RequestId&quot;: &quot;4d83167b-9e50-4d3a-9e9f-a8c5c521c159&quot;,
+        &quot;RetryAttempts&quot;: 0
+    }
+}
+End of DetectDominantLanguage
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;DetectDominantLanguage&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;
+# import the AWS SDK for python (boto3) - http://boto3.readthedocs.io/en/latest/
+import boto3
+# import json module to serialize JSON - https://docs.python.org/3.6/library/json.html
+import json
+
+# instantiate a new comprehend client
+comprehend = boto3.client(service_name='comprehend', region_name='eu-west-2')
+
+# provide english and spanish text to analyze
+english_string_list = ['Machine Learning is fascinating.', 'Studying Artificial Intelligence is my passion.'] 
+spanish_string_list = ['El aprendizaje automático es fascinante.', 'Estudiar Inteligencia Artificial es mi pasión.']
+
+print('Calling BatchDetectDominantLanguage')
+
+print('english_string_list results:')
+# json.dumps() writes JSON data to a Python string
+print(json.dumps(comprehend.batch_detect_dominant_language(TextList = english_string_list), sort_keys=True, indent=4))
+
+print('\nspanish_string_list results:')
+print(json.dumps(comprehend.batch_detect_dominant_language(TextList = spanish_string_list), sort_keys=True, indent=4))
+print('End of BatchDetectDominantLanguage\n')
+&lt;/pre&gt;
+Output:
+&lt;pre&gt;
+Calling BatchDetectDominantLanguage
+english_string_list results:
+{
+    &quot;ErrorList&quot;: [],
+    &quot;ResponseMetadata&quot;: {
+        &quot;HTTPHeaders&quot;: {
+            &quot;content-length&quot;: &quot;180&quot;,
+            &quot;content-type&quot;: &quot;application/x-amz-json-1.1&quot;,
+            &quot;date&quot;: &quot;Mon, 07 Jun 2021 17:40:46 GMT&quot;,
+            &quot;x-amzn-requestid&quot;: &quot;809271ff-8f5f-41a3-9461-cdf9746fad45&quot;
+        },
+        &quot;HTTPStatusCode&quot;: 200,
+        &quot;RequestId&quot;: &quot;809271ff-8f5f-41a3-9461-cdf9746fad45&quot;,
+        &quot;RetryAttempts&quot;: 0
+    },
+    &quot;ResultList&quot;: [
+        {
+            &quot;Index&quot;: 0,
+            &quot;Languages&quot;: [
+                {
+                    &quot;LanguageCode&quot;: &quot;en&quot;,
+                    &quot;Score&quot;: 0.9943646192550659
+                }
+            ]
+        },
+        {
+            &quot;Index&quot;: 1,
+            &quot;Languages&quot;: [
+                {
+                    &quot;LanguageCode&quot;: &quot;en&quot;,
+                    &quot;Score&quot;: 0.989561140537262
+                }
+            ]
+        }
+    ]
+}
+
+spanish_string_list results:
+{
+    &quot;ErrorList&quot;: [],
+    &quot;ResponseMetadata&quot;: {
+        &quot;HTTPHeaders&quot;: {
+            &quot;content-length&quot;: &quot;181&quot;,
+            &quot;content-type&quot;: &quot;application/x-amz-json-1.1&quot;,
+            &quot;date&quot;: &quot;Mon, 07 Jun 2021 17:40:46 GMT&quot;,
+            &quot;x-amzn-requestid&quot;: &quot;6826ea2c-6c23-4f7f-bf3b-50f2ef488bc5&quot;
+        },
+        &quot;HTTPStatusCode&quot;: 200,
+        &quot;RequestId&quot;: &quot;6826ea2c-6c23-4f7f-bf3b-50f2ef488bc5&quot;,
+        &quot;RetryAttempts&quot;: 0
+    },
+    &quot;ResultList&quot;: [
+        {
+            &quot;Index&quot;: 0,
+            &quot;Languages&quot;: [
+                {
+                    &quot;LanguageCode&quot;: &quot;es&quot;,
+                    &quot;Score&quot;: 0.9700182676315308
+                }
+            ]
+        },
+        {
+            &quot;Index&quot;: 1,
+            &quot;Languages&quot;: [
+                {
+                    &quot;LanguageCode&quot;: &quot;es&quot;,
+                    &quot;Score&quot;: 0.9737135171890259
+                }
+            ]
+        }
+    ]
+}
+End of BatchDetectDominantLanguage
+&lt;/pre&gt;
+&lt;h4&gt;Detect Named Entities&lt;/h4&gt;
+A entity is a textual reference to a unique name of a real-world object, cush as people, places, commercial items, dates, quantities,...&lt;br&gt;
+Like the language detection, Entities also have a score to indicate the confidence level that the entity type was detected correctly.&lt;br&gt;
+&lt;br&gt;
+AWS Comprehend entity types and descriptions:
+&lt;p&gt;
+&lt;img src=&quot;../images/2021-06-04-Amazon_AWS_1.png&quot; class=&quot;center&quot;/&gt;
+&lt;/p&gt;
+&lt;h4&gt;Detect Entities - Example&lt;/h4&gt;
+&lt;pre&gt;
+# import the AWS SDK for python (boto3) - http://boto3.readthedocs.io/en/latest/
+import boto3
+# import json module to serialize JSON - https://docs.python.org/3.6/library/json.html
+import json
+
+# instantiate a new comprehend client
+comprehend = boto3.client(service_name='comprehend', region_name='eu-west-2')
+
+# provide english text to analyze
+english_string = &quot;I study Machine Learning in Lisboa on Sunday.&quot;
+
+print('Calling DetectEntities')
+# json.dumps() writes JSON data to a Python string
+print(json.dumps(comprehend.detect_entities(Text = english_string, LanguageCode='en'), 
+		sort_keys=True, indent=4))
+print('End of DetectEntities\n')    	
+&lt;/pre&gt;
+Output:
+&lt;pre&gt;
+	Calling DetectEntities
+{
+    &quot;Entities&quot;: [
+        {
+            &quot;BeginOffset&quot;: 16,
+            &quot;EndOffset&quot;: 24,
+            &quot;Score&quot;: 0.6715667843818665,
+            &quot;Text&quot;: &quot;Learning&quot;,
+            &quot;Type&quot;: &quot;OTHER&quot;
+        },
+        {
+            &quot;BeginOffset&quot;: 28,
+            &quot;EndOffset&quot;: 34,
+            &quot;Score&quot;: 0.9909079074859619,
+            &quot;Text&quot;: &quot;Lisboa&quot;,
+            &quot;Type&quot;: &quot;LOCATION&quot;
+        },
+        {
+            &quot;BeginOffset&quot;: 38,
+            &quot;EndOffset&quot;: 44,
+            &quot;Score&quot;: 0.9938769936561584,
+            &quot;Text&quot;: &quot;Sunday&quot;,
+            &quot;Type&quot;: &quot;DATE&quot;
+        }
+    ],
+    &quot;ResponseMetadata&quot;: {
+        &quot;HTTPHeaders&quot;: {
+            &quot;content-length&quot;: &quot;294&quot;,
+            &quot;content-type&quot;: &quot;application/x-amz-json-1.1&quot;,
+            &quot;date&quot;: &quot;Mon, 14 Jun 2021 17:35:06 GMT&quot;,
+            &quot;x-amzn-requestid&quot;: &quot;5258b705-02c7-4b3e-a1cc-a95d958f1654&quot;
+        },
+        &quot;HTTPStatusCode&quot;: 200,
+        &quot;RequestId&quot;: &quot;5258b705-02c7-4b3e-a1cc-a95d958f1654&quot;,
+        &quot;RetryAttempts&quot;: 0
+    }
+}
+End of DetectEntities
+&lt;/pre&gt;
+&lt;strong&gt;Lisboa&lt;/strong&gt; was detected as a &lt;strong&gt;LOCATION&lt;/strong&gt; and &lt;strong&gt;Sunday&lt;/strong&gt; was detected as the &lt;strong&gt;DATE&lt;/strong&gt;, both with confidence levels ~0.99.&lt;p&gt;
+&lt;h4&gt;Detecting Key Phrases&lt;/h4&gt;
+A key phrase for AWS is analogous to a noun phrase, which represent an actual thing.
+&lt;h4&gt;Detecting Key Phrases - Example&lt;/h4&gt;
+&lt;pre&gt;
+# import the AWS SDK for python (boto3) - http://boto3.readthedocs.io/en/latest/
+import boto3
+# import json module to serialize JSON - https://docs.python.org/3.6/library/json.html
+import json
+
+# instantiate a new comprehend client
+comprehend = boto3.client(service_name='comprehend', region_name='eu-west-2') #us-east-1
+
+# provide english text to analyze
+english_string = 'I study Machine Learning in Lisbon on Thursday and it was great'
+
+print('Calling DetectKeyPhrases')
+# json.dumps() writes JSON data to a Python string
+print(json.dumps(comprehend.detect_key_phrases(Text = english_string, LanguageCode='en'),
+				 sort_keys=True, indent=4))
+print('End of DetectKeyPhrases\n')
+&lt;/pre&gt;
+Output:
+&lt;pre&gt;
+Calling DetectKeyPhrases
+{
+    &quot;KeyPhrases&quot;: [
+        {
+            &quot;BeginOffset&quot;: 8,
+            &quot;EndOffset&quot;: 24,
+            &quot;Score&quot;: 1.0,
+            &quot;Text&quot;: &quot;Machine Learning&quot;
+        },
+        {
+            &quot;BeginOffset&quot;: 28,
+            &quot;EndOffset&quot;: 34,
+            &quot;Score&quot;: 1.0,
+            &quot;Text&quot;: &quot;Lisbon&quot;
+        },
+        {
+            &quot;BeginOffset&quot;: 38,
+            &quot;EndOffset&quot;: 46,
+            &quot;Score&quot;: 1.0,
+            &quot;Text&quot;: &quot;Thursday&quot;
+        }
+    ],
+    &quot;ResponseMetadata&quot;: {
+        &quot;HTTPHeaders&quot;: {
+            &quot;content-length&quot;: &quot;213&quot;,
+            &quot;content-type&quot;: &quot;application/x-amz-json-1.1&quot;,
+            &quot;date&quot;: &quot;Tue, 15 Jun 2021 08:00:45 GMT&quot;,
+            &quot;x-amzn-requestid&quot;: &quot;35543e2c-14d0-463e-a4ea-81bdb705e6f0&quot;
+        },
+        &quot;HTTPStatusCode&quot;: 200,
+        &quot;RequestId&quot;: &quot;35543e2c-14d0-463e-a4ea-81bdb705e6f0&quot;,
+        &quot;RetryAttempts&quot;: 0
+    }
+}
+End of DetectKeyPhrases
+&lt;/pre&gt;
+&lt;h4&gt;Detecting Sentiments&lt;/h4&gt;
+
+to be continued...
+
+
+
+</description>
+        <pubDate>Fri, 04 Jun 2021 13:00:00 +0100</pubDate>
+        <link>http://localhost:4000//Amazon_AWS</link>
+        <link href="http://localhost:4000/Amazon_AWS"/>
+        <guid isPermaLink="true">http://localhost:4000/Amazon_AWS</guid>
+      </item>
+    
+      <item>
         <title>Métodos Numéricos - Bisecção</title>
         <description>&lt;script src=&quot;https://polyfill.io/v3/polyfill.min.js?features=es6&quot;&gt;&lt;/script&gt;
 &lt;script id=&quot;MathJax-script&quot; async

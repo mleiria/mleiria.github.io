@@ -1,0 +1,401 @@
+---
+layout: post
+title:  Amazon AWS. Cheat Sheet.
+date:   2021-06-04 12:00:00
+---
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+<small>Notes taken form <a href="https://www.oreilly.com/library/view/machine-learning-with/9781789806199/">Machine Learning with AWS</a></small>
+
+<h2>Amazon S3</h2>
+<h3>Intro</h3>
+	<ul>
+		<li><strong>S3</strong> is an online cloud object sotrage and retrieval service.</li>
+		<li>Is a place to store and retrieve files (text files, images, audio, videio,...)</li>
+		<li>Can easly be used in conjuntion with additional AWS Machine Learning and infrastructure services.</li>
+		<li>S3 is used to store almost any type of file. We can view it as a sort of file system and the folders, are called <strong>Buckets</strong>.</li>
+		<li>A file in a traditional filesystem is an <strong>object</strong> in S3. You cannot have buckets inside buckets.<br></li>
+		<li>Objects stored in Buckets can be accessed from a web server endpoint.</li>
+	</ul>
+
+<h3>Core S3 Concepts</h3>
+<strong>Type of data storable</strong>: text files, imagesm audio, video,... <br>
+<strong>Objects</strong>: are the most basic entity stored in S3. Every object contains data, metadata and a key.<br>
+<strong>Keys</strong>: is the name assigned to an object that uniquely identifies an object inside a bucket.<br>
+<strong>Bucket</strong>: is the container where you store objects. Are created at root level.You can have multiple buckets , but you cannot have buckets inside buckets.<br>
+<strong>Region</strong>: refers to the geographical region wheer Amazon S3 stores a Bucket. the pbject storage in a Bucket with different forms is as follows:<br><br>
+
+ https://s3.amazonaws.com/myBucket/pos_sentiment_leaves_of_grass.txt
+<br><br> 
+where:<br>
+<ul>
+<li> https://s3.amazonaws.com -> S3 Endpoint</li>	
+<li>myBucket -> Bucket Name</li>
+<li>pos_sentiment_leaves_of_grass.txt -> Key</li>
+<li>myBucket/pos_sentiment_leaves_of_grass.txt -> Globally unique key</li>
+</ul>
+
+<h3>S3 Operations</h3>
+The S3 API includes the following operations:
+<ul>
+<li><strong>Bucket</strong>: Create, Delete and List keys in a Bucket.</li>	
+<li><strong>Object</strong>: Write, Read and Delete.</li>	
+</ul>
+</p>
+<h2>Summarizing Text Documents Using NLP</h2>
+<h3>Amazon Comprehend</h3>
+<ul>
+	<li>Is a Natural Language Processing (NLP) Service.</li>
+	<li>Processes any text file in UTF-8 format. It uses a pre-trained model to examine a document or set of documents, in order to gather insights about the document set.</li>
+	<li>Amazon continuosly trains the model so there'se no need to provide training dadta.</li>
+</ul>
+<h4>First Step: Analyze the text data to determine the dominant language.</h4>
+For this step we have to operations available:
+<ol>
+	<li><strong>DetectDominantLanguage</strong>:accepts a UTF-8 text string greater than 20 characters and less than 5,000 bytes of UTF-8 encoded characters.</li>
+	<li><strong>BatchDetectDominantLanguage</strong>:accepts an array of strings as a list wiht a maximum of 25 documents. For each document the above rule for the size applies.</li>
+</ol>
+<p><strong>DetectDominantLanguage</strong></p>
+<pre>
+# import the AWS SDK for python (boto3) - http://boto3.readthedocs.io/en/latest/
+import boto3
+# import json module to serialize JSON - https://docs.python.org/3.6/library/json.html
+import json
+
+# instantiate a new comprehend client
+comprehend = boto3.client(service_name='comprehend', region_name='eu-west-2')
+
+# provide english and spanish text to analyze
+english_string = 'Machine Learning is fascinating.'
+spanish_string = 'El aprendizaje automático es fascinante.'
+portuguese_string = 'Olá, eu chamo-me Manuel Aleixo de Sousa Leiria'
+
+print('Calling DetectDominantLanguage')
+
+print('english_string result:')
+# json.dumps() writes JSON data to a Python string
+print(json.dumps(comprehend.detect_dominant_language(Text = english_string), sort_keys=True, indent=4))
+
+print('\n spanish_string result:')
+print(json.dumps(comprehend.detect_dominant_language(Text = spanish_string), sort_keys=True, indent=4))
+print('End of DetectDominantLanguage\n')
+
+print('\n portuguese_string result:')
+print(json.dumps(comprehend.detect_dominant_language(Text = portuguese_string), sort_keys=True, indent=4))
+print('End of DetectDominantLanguage\n')	
+
+</pre>
+Output:
+<pre>
+Calling DetectDominantLanguage
+english_string result:
+{
+    "Languages": [
+        {
+            "LanguageCode": "en",
+            "Score": 0.9943646192550659
+        }
+    ],
+    "ResponseMetadata": {
+        "HTTPHeaders": {
+            "content-length": "64",
+            "content-type": "application/x-amz-json-1.1",
+            "date": "Mon, 07 Jun 2021 17:31:03 GMT",
+            "x-amzn-requestid": "0dcc2001-6c79-4dae-8fe8-c76ef316814e"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "0dcc2001-6c79-4dae-8fe8-c76ef316814e",
+        "RetryAttempts": 0
+    }
+}
+
+ spanish_string result:
+{
+    "Languages": [
+        {
+            "LanguageCode": "es",
+            "Score": 0.9700182676315308
+        }
+    ],
+    "ResponseMetadata": {
+        "HTTPHeaders": {
+            "content-length": "64",
+            "content-type": "application/x-amz-json-1.1",
+            "date": "Mon, 07 Jun 2021 17:31:03 GMT",
+            "x-amzn-requestid": "2b463941-89eb-42a3-b577-45ed0fd351ee"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "2b463941-89eb-42a3-b577-45ed0fd351ee",
+        "RetryAttempts": 0
+    }
+}
+End of DetectDominantLanguage
+
+
+ portuguese_string result:
+{
+    "Languages": [
+        {
+            "LanguageCode": "pt",
+            "Score": 0.991827130317688
+        }
+    ],
+    "ResponseMetadata": {
+        "HTTPHeaders": {
+            "content-length": "63",
+            "content-type": "application/x-amz-json-1.1",
+            "date": "Mon, 07 Jun 2021 17:31:03 GMT",
+            "x-amzn-requestid": "4d83167b-9e50-4d3a-9e9f-a8c5c521c159"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "4d83167b-9e50-4d3a-9e9f-a8c5c521c159",
+        "RetryAttempts": 0
+    }
+}
+End of DetectDominantLanguage
+</pre>
+<p><strong>DetectDominantLanguage</strong></p>
+<pre>
+# import the AWS SDK for python (boto3) - http://boto3.readthedocs.io/en/latest/
+import boto3
+# import json module to serialize JSON - https://docs.python.org/3.6/library/json.html
+import json
+
+# instantiate a new comprehend client
+comprehend = boto3.client(service_name='comprehend', region_name='eu-west-2')
+
+# provide english and spanish text to analyze
+english_string_list = ['Machine Learning is fascinating.', 'Studying Artificial Intelligence is my passion.'] 
+spanish_string_list = ['El aprendizaje automático es fascinante.', 'Estudiar Inteligencia Artificial es mi pasión.']
+
+print('Calling BatchDetectDominantLanguage')
+
+print('english_string_list results:')
+# json.dumps() writes JSON data to a Python string
+print(json.dumps(comprehend.batch_detect_dominant_language(TextList = english_string_list), sort_keys=True, indent=4))
+
+print('\nspanish_string_list results:')
+print(json.dumps(comprehend.batch_detect_dominant_language(TextList = spanish_string_list), sort_keys=True, indent=4))
+print('End of BatchDetectDominantLanguage\n')
+</pre>
+Output:
+<pre>
+Calling BatchDetectDominantLanguage
+english_string_list results:
+{
+    "ErrorList": [],
+    "ResponseMetadata": {
+        "HTTPHeaders": {
+            "content-length": "180",
+            "content-type": "application/x-amz-json-1.1",
+            "date": "Mon, 07 Jun 2021 17:40:46 GMT",
+            "x-amzn-requestid": "809271ff-8f5f-41a3-9461-cdf9746fad45"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "809271ff-8f5f-41a3-9461-cdf9746fad45",
+        "RetryAttempts": 0
+    },
+    "ResultList": [
+        {
+            "Index": 0,
+            "Languages": [
+                {
+                    "LanguageCode": "en",
+                    "Score": 0.9943646192550659
+                }
+            ]
+        },
+        {
+            "Index": 1,
+            "Languages": [
+                {
+                    "LanguageCode": "en",
+                    "Score": 0.989561140537262
+                }
+            ]
+        }
+    ]
+}
+
+spanish_string_list results:
+{
+    "ErrorList": [],
+    "ResponseMetadata": {
+        "HTTPHeaders": {
+            "content-length": "181",
+            "content-type": "application/x-amz-json-1.1",
+            "date": "Mon, 07 Jun 2021 17:40:46 GMT",
+            "x-amzn-requestid": "6826ea2c-6c23-4f7f-bf3b-50f2ef488bc5"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "6826ea2c-6c23-4f7f-bf3b-50f2ef488bc5",
+        "RetryAttempts": 0
+    },
+    "ResultList": [
+        {
+            "Index": 0,
+            "Languages": [
+                {
+                    "LanguageCode": "es",
+                    "Score": 0.9700182676315308
+                }
+            ]
+        },
+        {
+            "Index": 1,
+            "Languages": [
+                {
+                    "LanguageCode": "es",
+                    "Score": 0.9737135171890259
+                }
+            ]
+        }
+    ]
+}
+End of BatchDetectDominantLanguage
+</pre>
+<h4>Detect Named Entities</h4>
+A entity is a textual reference to a unique name of a real-world object, cush as people, places, commercial items, dates, quantities,...<br>
+Like the language detection, Entities also have a score to indicate the confidence level that the entity type was detected correctly.<br>
+<br>
+AWS Comprehend entity types and descriptions:
+<p>
+<img src="../images/2021-06-04-Amazon_AWS_1.png" class="center"/>
+</p>
+<h4>Detect Entities - Example</h4>
+<pre>
+# import the AWS SDK for python (boto3) - http://boto3.readthedocs.io/en/latest/
+import boto3
+# import json module to serialize JSON - https://docs.python.org/3.6/library/json.html
+import json
+
+# instantiate a new comprehend client
+comprehend = boto3.client(service_name='comprehend', region_name='eu-west-2')
+
+# provide english text to analyze
+english_string = "I study Machine Learning in Lisboa on Sunday."
+
+print('Calling DetectEntities')
+# json.dumps() writes JSON data to a Python string
+print(json.dumps(comprehend.detect_entities(Text = english_string, LanguageCode='en'), 
+		sort_keys=True, indent=4))
+print('End of DetectEntities\n')    	
+</pre>
+Output:
+<pre>
+	Calling DetectEntities
+{
+    "Entities": [
+        {
+            "BeginOffset": 16,
+            "EndOffset": 24,
+            "Score": 0.6715667843818665,
+            "Text": "Learning",
+            "Type": "OTHER"
+        },
+        {
+            "BeginOffset": 28,
+            "EndOffset": 34,
+            "Score": 0.9909079074859619,
+            "Text": "Lisboa",
+            "Type": "LOCATION"
+        },
+        {
+            "BeginOffset": 38,
+            "EndOffset": 44,
+            "Score": 0.9938769936561584,
+            "Text": "Sunday",
+            "Type": "DATE"
+        }
+    ],
+    "ResponseMetadata": {
+        "HTTPHeaders": {
+            "content-length": "294",
+            "content-type": "application/x-amz-json-1.1",
+            "date": "Mon, 14 Jun 2021 17:35:06 GMT",
+            "x-amzn-requestid": "5258b705-02c7-4b3e-a1cc-a95d958f1654"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "5258b705-02c7-4b3e-a1cc-a95d958f1654",
+        "RetryAttempts": 0
+    }
+}
+End of DetectEntities
+</pre>
+<strong>Lisboa</strong> was detected as a <strong>LOCATION</strong> and <strong>Sunday</strong> was detected as the <strong>DATE</strong>, both with confidence levels ~0.99.<p>
+<h4>Detecting Key Phrases</h4>
+A key phrase for AWS is analogous to a noun phrase, which represent an actual thing.
+<h4>Detecting Key Phrases - Example</h4>
+<pre>
+# import the AWS SDK for python (boto3) - http://boto3.readthedocs.io/en/latest/
+import boto3
+# import json module to serialize JSON - https://docs.python.org/3.6/library/json.html
+import json
+
+# instantiate a new comprehend client
+comprehend = boto3.client(service_name='comprehend', region_name='eu-west-2') #us-east-1
+
+# provide english text to analyze
+english_string = 'I study Machine Learning in Lisbon on Thursday and it was great'
+
+print('Calling DetectKeyPhrases')
+# json.dumps() writes JSON data to a Python string
+print(json.dumps(comprehend.detect_key_phrases(Text = english_string, LanguageCode='en'),
+				 sort_keys=True, indent=4))
+print('End of DetectKeyPhrases\n')
+</pre>
+Output:
+<pre>
+Calling DetectKeyPhrases
+{
+    "KeyPhrases": [
+        {
+            "BeginOffset": 8,
+            "EndOffset": 24,
+            "Score": 1.0,
+            "Text": "Machine Learning"
+        },
+        {
+            "BeginOffset": 28,
+            "EndOffset": 34,
+            "Score": 1.0,
+            "Text": "Lisbon"
+        },
+        {
+            "BeginOffset": 38,
+            "EndOffset": 46,
+            "Score": 1.0,
+            "Text": "Thursday"
+        }
+    ],
+    "ResponseMetadata": {
+        "HTTPHeaders": {
+            "content-length": "213",
+            "content-type": "application/x-amz-json-1.1",
+            "date": "Tue, 15 Jun 2021 08:00:45 GMT",
+            "x-amzn-requestid": "35543e2c-14d0-463e-a4ea-81bdb705e6f0"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "35543e2c-14d0-463e-a4ea-81bdb705e6f0",
+        "RetryAttempts": 0
+    }
+}
+End of DetectKeyPhrases
+</pre>
+<h4>Detecting Sentiments</h4>
+
+to be continued...
+
+
+

@@ -1,0 +1,94 @@
+I"A<section>
+  
+
+    
+    
+    
+        <h3>This year's posts</h3>
+    
+
+    
+      
+        <ul>
+      
+        <li><time>10 Dec - </time>
+          <a href="/Metodos_Numericos-Biseccao_ScalaImpl">
+            Métodos Numéricos - Bisecção (implementação em Scala)
+          </a>
+        </li>
+    
+      
+        
+        
+        
+      
+        <li><time>04 Jun - </time>
+          <a href="/Amazon_AWS">
+            Amazon AWS. Cheat Sheet.
+          </a>
+        </li>
+    
+      
+        
+        
+        
+      
+        <li><time>03 May - </time>
+          <a href="/Metodos_Numericos-Biseccao">
+            Métodos Numéricos - Bisecção
+          </a>
+        </li>
+    
+      
+        
+        
+        
+          </ul>
+          <h3>2020</h3>
+          <ul>
+        
+      
+        <li><time>25 Jun - </time>
+          <a href="/FT_NN_Hyperparams">
+            Rede Neuronal - Afinar os Hyperparâmetros
+          </a>
+        </li>
+    
+      
+        
+        
+        
+      
+        <li><time>25 Jun - </time>
+          <a href="/Regressao-MLP-Dados-Sinteticos">
+            Regressão MLP com dados sintéticos
+          </a>
+        </li>
+    
+      
+        
+        
+        
+      
+        <li><time>04 Jun - </time>
+          <a href="/Linear-Regression-Tensorflow">
+            Regressão Linear com TensorFlow. O essencial.
+          </a>
+        </li>
+    
+      
+        
+        
+        
+      
+        <li><time>04 Jun - </time>
+          <a href="/Algebra-Linear">
+            Álgebra Linear. O essencial.
+          </a>
+        </li>
+    
+    </ul>
+
+  
+</section>
+:ET

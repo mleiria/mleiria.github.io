@@ -1,0 +1,16 @@
+I"Â<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+<script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+
+<p><small>Notes taken form <a href="https://www.oreilly.com/library/view/machine-learning-with/9781789806199/">Machine Learning with AWS</a></small></p>
+:ET

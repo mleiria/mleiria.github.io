@@ -252,5 +252,57 @@ vt: breeze.linalg.Transpose[breeze.linalg.DenseVector[Double]] = Transpose(Dense
 scala> vt * m2
 res50: breeze.linalg.Transpose[breeze.linalg.DenseVector[Double]] = Transpose(DenseVector(34.0, 37.0))
 </pre>
+<h2>Broadcasting</h2>
+Tal como NumPy, Breeze também suporta broadcasting.<br>
+Consideremos o seguinte exemplo:
+<pre>
+ scala> val inputs: DenseMatrix[Double] = DenseMatrix(
+     |     (1.0, 2.0, 3.0, 2.5),
+     |     (2.0, 5.0, -1.0, 2.0),
+     |     (-1.5, 2.7, 3.3, -0.8))
+inputs: breeze.linalg.DenseMatrix[Double] =
+1.0   2.0  3.0   2.5
+2.0   5.0  -1.0  2.0
+-1.5  2.7  3.3   -0.8   
+
+scala> val weights: DenseMatrix[Double] = DenseMatrix(
+     |     (0.2, 0.8, -0.5, 1.0),
+     |     (0.5, -0.91, 0.26, -0.5),
+     |     (-0.26, -0.27, 0.17, 0.87))
+weights: breeze.linalg.DenseMatrix[Double] =
+0.2    0.8    -0.5  1.0
+0.5    -0.91  0.26  -0.5
+-0.26  -0.27  0.17  0.87
+
+scala> val biases: DenseVector[Double] = DenseVector(2, 3, 0.5)
+biases: breeze.linalg.DenseVector[Double] = DenseVector(2.0, 3.0, 0.5)
+</pre>
+Este é um exemplo clássico das redes neuronais: tenho um batch de <i>inputs</i> que formam uma matriz (3 x 4) e tenho uma matriz de <i>weights</i> também (3 x 4). Por fim tenho um
+vector de <i>biases</i>. Normalmente o que se pretende é <i>inputs * weights + biases</i>. De forma a alinhar as dimensões para a multiplicação das matrizes, temos de obter a transposta dos <i>weights</i>:
+<pre>
+scala> val m = inputs * weights.t
+m: breeze.linalg.DenseMatrix[Double] =
+2.8                  -1.79                1.8849999999999998
+6.9                  -4.81                -0.30000000000000004
+-0.5899999999999999  -1.9490000000000003  -0.4740000000000001
+</pre>
+e obtemos como resultado uma matriz (3 x 3). Agora chegamos ao broadcast: Quero adicionar o vector de <i>biases</i> às colunas da matriz, ou seja,
+o valor 2 vai ser adicionado à primeira coluna, o valor 3 à segunda e o valor 0.5 à terceira. A sintax é a seguinte:
+<pre>
+scala> val outputs: DenseMatrix[Double] = m(*, ::) + biases
+outputs: breeze.linalg.DenseMatrix[Double] =
+4.8                 1.21                 2.385
+8.9                 -1.8099999999999996  0.19999999999999996
+1.4100000000000001  1.0509999999999997   0.025999999999999912
+</pre>
+Se quisesse fazer broadcast às linhas seria:
+<pre>
+scala> val outputs: DenseMatrix[Double] = m( ::, *) + biases
+outputs: breeze.linalg.DenseMatrix[Double] =
+4.8                   0.20999999999999996  3.885
+9.9                   -1.8099999999999996  2.7
+-0.08999999999999986  -1.4490000000000003  0.025999999999999912
+</pre>
+
 
 Há muito mais para explorar mas fica aqui uma pequena amostra das potencialidades desta biblioteca.
